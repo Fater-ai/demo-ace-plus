@@ -1,6 +1,6 @@
 ---
-title: ACE 0.6B 512px
-emoji: 💬
+title: ACE-Chat
+emoji: 🪄
 colorFrom: yellow
 colorTo: purple
 sdk: gradio
