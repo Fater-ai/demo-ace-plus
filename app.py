@@ -650,8 +650,8 @@ class ChatBotUI(object):
 
             print(new_message)
             imgs = self.pipe(
-                input_image=edit_image,
-                input_mask=edit_image_mask,
+                image=edit_image,
+                mask=edit_image_mask,
                 task=edit_task,
                 prompt=[new_message] *
                 len(edit_image) if edit_image is not None else [new_message],
