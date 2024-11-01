@@ -16,43 +16,12 @@ from scepter.modules.utils.distribute import we
 from scepter.modules.utils.logger import get_logger
 from scepter.modules.inference.diffusion_inference import DiffusionInference, get_model
 
-def check_list_of_list(ll):
-    return isinstance(ll, list) and all(isinstance(i, list) for i in ll)
-
-def pack_imagelist_into_tensor(image_list):
-    # allow None
-    example = None
-    image_tensor, shapes = [], []
-    for img in image_list:
-        if img is None:
-            example = find_example(image_tensor,
-                                   image_list) if example is None else example
-            image_tensor.append(example)
-            shapes.append(None)
-            continue
-        _, c, h, w = img.size()
-        image_tensor.append(img.view(c, h * w).transpose(1, 0))  # h*w, c
-        shapes.append((h, w))
-
-    image_tensor = pad_sequence(image_tensor,
-                                batch_first=True).permute(0, 2, 1)  # b, c, l
-    return image_tensor, shapes
-
-def to_device(inputs, strict=True):
-    if inputs is None:
-        return None
-    if strict:
-        assert all(isinstance(i, torch.Tensor) for i in inputs)
-    return [i.to(we.device_id) if i is not None else None for i in inputs]
-
-
-def unpack_tensor_into_imagelist(image_tensor, shapes):
-    image_list = []
-    for img, shape in zip(image_tensor, shapes):
-        h, w = shape[0], shape[1]
-        image_list.append(img[:, :h * w].view(1, -1, h, w))
-
-    return image_list
+from modules.model.utils.basic_utils import (
+    check_list_of_list,
+    pack_imagelist_into_tensor_v2 as pack_imagelist_into_tensor,
+    to_device,
+    unpack_tensor_into_imagelist
+)
 
 
 def process_edit_image(images,
