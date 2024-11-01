@@ -638,9 +638,9 @@ class ChatBotUI(object):
                         history_io = history_result[img_id]
 
                 buffered = io.BytesIO()
-                edit_image[0].save(buffered, format='PNG')
+                edit_image[0].save(buffered, format='JPEG')
                 img_b64 = base64.b64encode(buffered.getvalue()).decode('utf-8')
-                img_str = f'<img src="data:image/png;base64,{img_b64}" style="pointer-events: none;">'
+                img_str = f'<img src="data:image/jpg;base64,{img_b64}" style="pointer-events: none;">'
                 pre_info = f'Received one or more images, so image editing is conducted.\n The first input image @{img_ids[0]} is:\n {img_str}'
             else:
                 pre_info = 'No image ids were found in the provided text prompt, so text-guided image generation is conducted. \n'
@@ -713,7 +713,7 @@ class ChatBotUI(object):
             buffered = io.BytesIO()
             img.convert('RGB').save(buffered, format='JPEG')
             img_b64 = base64.b64encode(buffered.getvalue()).decode('utf-8')
-            img_str = f'<img src="data:image/png;base64,{img_b64}" style="pointer-events: none;">'
+            img_str = f'<img src="data:image/jpg;base64,{img_b64}" style="pointer-events: none;">'
 
             history.append(
                 (message,
@@ -831,9 +831,9 @@ class ChatBotUI(object):
                     edit_task.append('')
 
                 buffered = io.BytesIO()
-                img.save(buffered, format='PNG')
+                img.save(buffered, format='JPEG')
                 img_b64 = base64.b64encode(buffered.getvalue()).decode('utf-8')
-                img_str = f'<img src="data:image/png;base64,{img_b64}" style="pointer-events: none;">'
+                img_str = f'<img src="data:image/jpg;base64,{img_b64}" style="pointer-events: none;">'
                 pre_info = f'Received one or more images, so image editing is conducted.\n The first input image is:\n {img_str}'
             else:
                 pre_info = 'No image ids were found in the provided text prompt, so text-guided image generation is conducted. \n'
@@ -855,7 +855,7 @@ class ChatBotUI(object):
             buffered = io.BytesIO()
             img.convert('RGB').save(buffered, format='JPEG')
             img_b64 = base64.b64encode(buffered.getvalue()).decode('utf-8')
-            img_str = f'<img src="data:image/png;base64,{img_b64}" style="pointer-events: none;">'
+            img_str = f'<img src="data:image/jpg;base64,{img_b64}" style="pointer-events: none;">'
             history = [(prompt,
                         f'{pre_info} The generated image is:\n {img_str}')]
             return self.get_history(history), gr.update(value=''), gr.update(
@@ -908,7 +908,7 @@ class ChatBotUI(object):
         def edit_image(evt: gr.SelectData):
             if isinstance(evt.value, str):
                 img_b64s = re.findall(
-                    '<img src="data:image/png;base64,(.*?)" style="pointer-events: none;">',
+                    '<img src="data:image/jpg;base64,(.*?)" style="pointer-events: none;">',
                     evt.value)
                 imgs = [
                     Image.open(io.BytesIO(base64.b64decode(copy.deepcopy(i))))
@@ -1134,14 +1134,14 @@ class ChatBotUI(object):
         thumbnail.save(thumbnail_path, format='JPEG')
 
         buffered = io.BytesIO()
-        img.convert('RGB').save(buffered, format='PNG')
+        img.convert('RGB').save(buffered, format='JPEG')
         img_b64 = base64.b64encode(buffered.getvalue()).decode('utf-8')
-        img_str = f'<img src="data:image/png;base64,{img_b64}" style="pointer-events: none;">'
+        img_str = f'<img src="data:image/jpg;base64,{img_b64}" style="pointer-events: none;">'
 
         buffered = io.BytesIO()
-        mask.convert('RGB').save(buffered, format='PNG')
+        mask.convert('RGB').save(buffered, format='JPEG')
         mask_b64 = base64.b64encode(buffered.getvalue()).decode('utf-8')
-        mask_str = f'<img src="data:image/png;base64,{mask_b64}" style="pointer-events: none;">'
+        mask_str = f'<img src="data:image/jpg;base64,{mask_b64}" style="pointer-events: none;">'
 
         images[img_id] = {
             'image': save_path,
@@ -1190,9 +1190,9 @@ class ChatBotUI(object):
         }
 
         buffered = io.BytesIO()
-        img.convert('RGB').save(buffered, format='PNG')
+        img.convert('RGB').save(buffered, format='JPEG')
         img_b64 = base64.b64encode(buffered.getvalue()).decode('utf-8')
-        img_str = f'<img src="data:image/png;base64,{img_b64}" style="pointer-events: none;">'
+        img_str = f'<img src="data:image/jpg;base64,{img_b64}" style="pointer-events: none;">'
 
         history.append(
             (None,
