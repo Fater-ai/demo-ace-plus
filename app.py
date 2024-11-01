@@ -1,5 +1,12 @@
 # -*- coding: utf-8 -*-
 # Copyright (c) Alibaba, Inc. and its affiliates.
+import os
+import shlex
+import subprocess
+
+subprocess.run('pip install gradio==4.44.1', env=os.environ)
+subprocess.run(shlex.split('pip install flash-attn --no-build-isolation'), env=os.environ | {'FLASH_ATTENTION_SKIP_CUDA_BUILD': "TRUE"})
+
 import argparse
 import base64
 import copy
@@ -26,13 +33,6 @@ from scepter.modules.utils.config import Config
 from scepter.modules.utils.directory import get_md5
 from scepter.modules.utils.file_system import FS
 from scepter.studio.utils.env import init_env
-
-import os
-import shlex
-import subprocess
-
-subprocess.run(shlex.split('pip install flash-attn --no-build-isolation'), env=os.environ | {'FLASH_ATTENTION_SKIP_CUDA_BUILD': "TRUE"})
-subprocess.run('pip install gradio==4.44.1', env=os.environ)
 
 from infer import ACEInference
 from example import get_examples
