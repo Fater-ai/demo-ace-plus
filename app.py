@@ -32,6 +32,7 @@ import shlex
 import subprocess
 
 subprocess.run(shlex.split('pip install flash-attn --no-build-isolation'), env=os.environ | {'FLASH_ATTENTION_SKIP_CUDA_BUILD': "TRUE"})
+subprocess.run('pip install gradio==4.44.1', env=os.environ)
 
 from infer import ACEInference
 from example import get_examples
