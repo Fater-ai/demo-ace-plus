@@ -805,7 +805,7 @@ class ChatBotUI(object):
                              outputs=chat_outputs)
 
         ########################################
-        @spaces.GPU(duration=60)
+        @spaces.GPU(duration=600)
         def run_example(task, img, img_mask, ref1, prompt, seed):
             edit_image, edit_image_mask, edit_task = [], [], []
             if img is not None:
