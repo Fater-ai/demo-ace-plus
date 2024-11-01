@@ -427,7 +427,7 @@ class ChatBotUI(object):
     def set_callbacks(self, *args, **kwargs):
 
         ########################################
-        @spaces.GPU(duration=120)
+        @spaces.GPU(duration=600)
         def change_model(model_name):
             if model_name not in self.model_choices:
                 gr.Info('The provided model name is not a valid choice!')
@@ -577,7 +577,7 @@ class ChatBotUI(object):
             outputs=[self.history, self.chatbot, self.text, self.gallery])
 
         ########################################
-        @spaces.GPU(duration=120)
+        @spaces.GPU(duration=600)
         def run_chat(message,
                      extend_prompt,
                      history,
