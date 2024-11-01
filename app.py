@@ -27,6 +27,12 @@ from scepter.modules.utils.directory import get_md5
 from scepter.modules.utils.file_system import FS
 from scepter.studio.utils.env import init_env
 
+import os
+import shlex
+import subprocess
+
+subprocess.run(shlex.split('pip install flash-attn --no-build-isolation'), env=os.environ | {'FLASH_ATTENTION_SKIP_CUDA_BUILD': "TRUE"})
+
 from infer import ACEInference
 from example import get_examples
 from utils import load_image
