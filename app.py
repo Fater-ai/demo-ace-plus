@@ -862,33 +862,33 @@ class ChatBotUI(object):
             return self.get_history(history), gr.update(value=''), gr.update(
                 visible=False)
 
-        # with self.eg:
-        #     self.example_task = gr.Text(label='Task Name',
-        #                                 value='',
-        #                                 visible=False)
-        #     self.example_image = gr.Image(label='Edit Image',
-        #                                   type='pil',
-        #                                   image_mode='RGB',
-        #                                   visible=False)
-        #     self.example_mask = gr.Image(label='Edit Image Mask',
-        #                                  type='pil',
-        #                                  image_mode='L',
-        #                                  visible=False)
-        #     self.example_ref_im1 = gr.Image(label='Ref Image',
-        #                                     type='pil',
-        #                                     image_mode='RGB',
-        #                                     visible=False)
+        with self.eg:
+            self.example_task = gr.Text(label='Task Name',
+                                        value='',
+                                        visible=False)
+            self.example_image = gr.Image(label='Edit Image',
+                                          type='pil',
+                                          image_mode='RGB',
+                                          visible=False)
+            self.example_mask = gr.Image(label='Edit Image Mask',
+                                         type='pil',
+                                         image_mode='L',
+                                         visible=False)
+            self.example_ref_im1 = gr.Image(label='Ref Image',
+                                            type='pil',
+                                            image_mode='RGB',
+                                            visible=False)
 
-        #     self.examples = gr.Examples(
-        #         fn=run_example,
-        #         examples=self.chatbot_examples,
-        #         inputs=[
-        #             self.example_task, self.example_image, self.example_mask,
-        #             self.example_ref_im1, self.text, self.seed
-        #         ],
-        #         outputs=[self.chatbot, self.text, self.gallery],
-        #         examples_per_page=4,
-        #         run_on_click=True)
+            self.examples = gr.Examples(
+                fn=run_example,
+                examples=self.chatbot_examples,
+                inputs=[
+                    self.example_task, self.example_image, self.example_mask,
+                    self.example_ref_im1, self.text, self.seed
+                ],
+                outputs=[self.chatbot, self.text, self.gallery],
+                examples_per_page=4,
+                run_on_click=True)
 
         ########################################
         def upload_image():
