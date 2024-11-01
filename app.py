@@ -27,9 +27,9 @@ from scepter.modules.utils.directory import get_md5
 from scepter.modules.utils.file_system import FS
 from scepter.studio.utils.env import init_env
 
-from .infer import ACEInference
-from .example import get_examples
-from .utils import load_image
+from infer import ACEInference
+from example import get_examples
+from utils import load_image
 
 
 refresh_sty = '\U0001f504'  # 🔄
@@ -44,10 +44,9 @@ lock = threading.Lock()
 
 class ChatBotUI(object):
     def __init__(self,
-                 cfg_general_file,
+                 cfg,
                  root_work_dir='./'):
 
-        cfg = Config(cfg_file=cfg_general_file)
         cfg.WORK_DIR = os.path.join(root_work_dir, cfg.WORK_DIR)
         if not FS.exists(cfg.WORK_DIR):
             FS.make_dir(cfg.WORK_DIR)
@@ -1189,11 +1188,10 @@ class ChatBotUI(object):
 
 
 if __name__ == '__main__':
-    cfg = Config(cfg_file="config/chatbot_ui.yaml")
 
+    cfg = Config(cfg_file="config/chatbot_ui.yaml")
     with gr.Blocks() as demo:
         chatbot = ChatBotUI(cfg)
-        chatbot.create_bot_ui()
+        chatbot.create_ui()
         chatbot.set_callbacks()
-    
     demo.launch()

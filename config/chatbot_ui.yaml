@@ -2,9 +2,11 @@ WORK_DIR: ./cache/chatbot
 FILE_SYSTEM:
   - NAME: LocalFs
     TEMP_DIR: ./cache
-  - NAME: ModelscopeFs
+  - NAME: HttpFs
     TEMP_DIR: ./cache
   - NAME: HuggingfaceFs
+    TEMP_DIR: ./cache
+  - NAME: ModelscopeFs
     TEMP_DIR: ./cache
 #
 ENABLE_I2V: False

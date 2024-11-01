@@ -1,5 +1,7 @@
-huggingface_hub==0.25.2
+huggingface_hub
 scepter>=1.1.0
 diffusers
 transformers
 gradio_imageslider
+torch>=2.4.0
+torchvision
