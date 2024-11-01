@@ -3,8 +3,11 @@
 import os
 import shlex
 import subprocess
-
 subprocess.run(shlex.split('pip install flash-attn --no-build-isolation'), env=os.environ | {'FLASH_ATTENTION_SKIP_CUDA_BUILD': "TRUE"})
+
+import sys
+import csv
+csv.field_size_limit(sys.maxsize)
 
 import argparse
 import base64
