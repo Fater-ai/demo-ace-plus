@@ -10,7 +10,7 @@ import random
 import re
 import string
 import threading
-
+import spaces
 import cv2
 import gradio as gr
 import numpy as np
@@ -421,6 +421,7 @@ class ChatBotUI(object):
     def set_callbacks(self, *args, **kwargs):
 
         ########################################
+        @spaces.GPU(duration=120)
         def change_model(model_name):
             if model_name not in self.model_choices:
                 gr.Info('The provided model name is not a valid choice!')
@@ -489,6 +490,7 @@ class ChatBotUI(object):
                             outputs=[self.text, self.gallery])
 
         ########################################
+        @spaces.GPU(duration=120)
         def generate_video(message,
                            extend_prompt,
                            history,
@@ -569,6 +571,7 @@ class ChatBotUI(object):
             outputs=[self.history, self.chatbot, self.text, self.gallery])
 
         ########################################
+        @spaces.GPU(duration=120)
         def run_chat(message,
                      extend_prompt,
                      history,
@@ -787,6 +790,7 @@ class ChatBotUI(object):
                          outputs=chat_outputs)
 
         ########################################
+        @spaces.GPU(duration=120)
         def retry_chat(*args):
             return run_chat(self.retry_msg, *args)
 
@@ -795,6 +799,7 @@ class ChatBotUI(object):
                              outputs=chat_outputs)
 
         ########################################
+        @spaces.GPU(duration=60)
         def run_example(task, img, img_mask, ref1, prompt, seed):
             edit_image, edit_image_mask, edit_task = [], [], []
             if img is not None:

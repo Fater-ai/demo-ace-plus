@@ -3,6 +3,6 @@ scepter>=1.1.0
 diffusers
 transformers
 gradio_imageslider
-torch>=2.4.0
+torch==2.4.0
 torchvision
 flash-attn
