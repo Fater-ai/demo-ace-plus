@@ -2,3 +2,4 @@ huggingface_hub==0.25.2
 scepter>=1.1.0
 diffusers
 transformers
+gradio_imageslider
