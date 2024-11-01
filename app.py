@@ -711,7 +711,7 @@ class ChatBotUI(object):
             }
 
             buffered = io.BytesIO()
-            img.convert('RGB').save(buffered, format='PNG')
+            img.convert('RGB').save(buffered, format='JPEG')
             img_b64 = base64.b64encode(buffered.getvalue()).decode('utf-8')
             img_str = f'<img src="data:image/png;base64,{img_b64}" style="pointer-events: none;">'
 
@@ -853,7 +853,7 @@ class ChatBotUI(object):
 
             img = imgs[0]
             buffered = io.BytesIO()
-            img.convert('RGB').save(buffered, format='PNG')
+            img.convert('RGB').save(buffered, format='JPEG')
             img_b64 = base64.b64encode(buffered.getvalue()).decode('utf-8')
             img_str = f'<img src="data:image/png;base64,{img_b64}" style="pointer-events: none;">'
             history = [(prompt,
