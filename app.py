@@ -774,7 +774,8 @@ class ChatBotUI(object):
                 history.pop(0)
 
             return history, images, history_result, self.get_history(
-                history), gr.update(value=''), gr.update(visible=False), gr.update(value=retry_msg)
+                history), gr.update(value=''), gr.update(
+                    visible=False), retry_msg
 
         chat_inputs = [
             self.extend_prompt, self.history, self.images, self.use_history,
@@ -798,7 +799,10 @@ class ChatBotUI(object):
                          inputs=[self.text] + chat_inputs,
                          outputs=chat_outputs)
 
-        self.retry_btn.click(run_chat,
+        def retry_fn(*args):
+            return run_chat(*args)
+
+        self.retry_btn.click(retry_fn,
                              inputs=[self.retry_msg] + chat_inputs,
                              outputs=chat_outputs)
 
