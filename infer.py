@@ -139,6 +139,10 @@ class ACEInference(DiffusionInference):
         self.decoder_bias = cfg.get('DECODER_BIAS', 0)
         self.default_n_prompt = cfg.get('DEFAULT_N_PROMPT', '')
 
+        self.dynamic_load(self.first_stage_model, 'first_stage_model')
+        self.dynamic_load(self.cond_stage_model, 'cond_stage_model')
+        self.dynamic_load(self.diffusion_model, 'diffusion_model')
+
     @torch.no_grad()
     def encode_first_stage(self, x, **kwargs):
         _, dtype = self.get_function_info(self.first_stage_model, 'encode')
@@ -242,12 +246,8 @@ class ACEInference(DiffusionInference):
         ctx, null_ctx = {}, {}
 
         # Get Noise Shape
-        self.dynamic_load(self.first_stage_model, 'first_stage_model')
         image = to_device(image)
         x = self.encode_first_stage(image)
-        self.dynamic_unload(self.first_stage_model,
-                            'first_stage_model',
-                            skip_loaded=True)
         noise = [
             torch.empty(*i.shape, device=we.device_id).normal_(generator=g)
             for i in x
@@ -261,7 +261,7 @@ class ACEInference(DiffusionInference):
         ctx['x_mask'] = null_ctx['x_mask'] = cond_mask
 
         # Encode Prompt
-        self.dynamic_load(self.cond_stage_model, 'cond_stage_model')
+        
         function_name, dtype = self.get_function_info(self.cond_stage_model)
         cont, cont_mask = getattr(get_model(self.cond_stage_model),
                                   function_name)(prompt)
@@ -271,14 +271,10 @@ class ACEInference(DiffusionInference):
                                             function_name)(n_prompt)
         null_cont, null_cont_mask = self.cond_stage_embeddings(
             prompt, edit_image, null_cont, null_cont_mask)
-        self.dynamic_unload(self.cond_stage_model,
-                            'cond_stage_model',
-                            skip_loaded=False)
         ctx['crossattn'] = cont
         null_ctx['crossattn'] = null_cont
 
         # Encode Edit Images
-        self.dynamic_load(self.first_stage_model, 'first_stage_model')
         edit_image = [to_device(i, strict=False) for i in edit_image]
         edit_image_mask = [to_device(i, strict=False) for i in edit_image_mask]
         e_img, e_mask = [], []
@@ -289,14 +285,11 @@ class ACEInference(DiffusionInference):
                 m = [None] * len(u)
             e_img.append(self.encode_first_stage(u, **kwargs))
             e_mask.append([self.interpolate_func(i) for i in m])
-        self.dynamic_unload(self.first_stage_model,
-                            'first_stage_model',
-                            skip_loaded=True)
+
         null_ctx['edit'] = ctx['edit'] = e_img
         null_ctx['edit_mask'] = ctx['edit_mask'] = e_mask
 
         # Diffusion Process
-        self.dynamic_load(self.diffusion_model, 'diffusion_model')
         function_name, dtype = self.get_function_info(self.diffusion_model)
         with torch.autocast('cuda',
                             enabled=dtype in ('float16', 'bfloat16'),
@@ -337,17 +330,10 @@ class ACEInference(DiffusionInference):
                 guide_rescale=guide_rescale,
                 return_intermediate=None,
                 **kwargs)
-        self.dynamic_unload(self.diffusion_model,
-                            'diffusion_model',
-                            skip_loaded=False)
 
         # Decode to Pixel Space
-        self.dynamic_load(self.first_stage_model, 'first_stage_model')
         samples = unpack_tensor_into_imagelist(latent, x_shapes)
         x_samples = self.decode_first_stage(samples)
-        self.dynamic_unload(self.first_stage_model,
-                            'first_stage_model',
-                            skip_loaded=False)
 
         imgs = [
             torch.clamp((x_i + 1.0) / 2.0 + self.decoder_bias / 255,
