@@ -887,6 +887,7 @@ class ChatBotUI(object):
                     self.example_ref_im1, self.text, self.seed
                 ],
                 outputs=[self.chatbot, self.text, self.gallery],
+                examples_per_page=4,
                 run_on_click=True)
 
         ########################################
