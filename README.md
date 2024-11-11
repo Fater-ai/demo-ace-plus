@@ -1,5 +1,5 @@
 ---
-title: ACE-Chat
+title: TongyiACE-Chat
 emoji: 🪄
 colorFrom: yellow
 colorTo: purple
@@ -8,7 +8,7 @@ sdk_version: 4.44.1
 app_file: app.py
 pinned: false
 license: apache-2.0
-short_description: "ACE: All-round Creator and Editor"
+short_description: "(Tongyi Lab) ACE: All-round Creator and Editor"
 models:
 - scepter-studio/ACE-0.6B-512px
 ---
