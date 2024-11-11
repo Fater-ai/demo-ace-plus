@@ -1,5 +1,5 @@
 ---
-title: Tongyi-ACE-Chat
+title: ACE-Chat
 emoji: 🪄
 colorFrom: yellow
 colorTo: purple
