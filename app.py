@@ -76,6 +76,14 @@ class ChatBotUI(object):
             if model_cfg.IS_DEFAULT: self.default_model_name = model_name
             self.model_choices[model_name] = model_cfg
         print('Models: ', self.model_choices.keys())
+
+        FS.get_object_to_local_file("ms://AI-ModelScope/FLUX.1-dev@flux1-dev.safetensors")
+        FS.get_object_to_local_file("ms://AI-ModelScope/FLUX.1-dev@ae.safetensors")
+        FS.get_dir_to_local_dir("ms://AI-ModelScope/FLUX.1-dev@text_encoder_2/")
+        FS.get_dir_to_local_dir("ms://AI-ModelScope/FLUX.1-dev@tokenizer_2/")
+        FS.get_dir_to_local_dir("ms://AI-ModelScope/FLUX.1-dev@text_encoder/")
+        FS.get_dir_to_local_dir("ms://AI-ModelScope/FLUX.1-dev@tokenizer/")
+        
         assert len(self.model_choices) > 0
         if self.default_model_name == "": self.default_model_name = self.model_choices.keys()[0]
         self.model_name = self.default_model_name
