@@ -70,7 +70,7 @@ MODEL:
   #
   DIFFUSION_MODEL:
     NAME: ACE
-    PRETRAINED_MODEL: hf://iic/ACE-0.6B-1024px@models/dit/ace_0.6b_1024px.pth
+    PRETRAINED_MODEL: hf://scepter-studio/ACE-0.6B-1024px@models/dit/ace_0.6b_1024px.pth
     IGNORE_KEYS: [ ]
     PATCH_SIZE: 2
     IN_CHANNELS: 4
@@ -90,7 +90,7 @@ MODEL:
   FIRST_STAGE_MODEL:
     NAME: AutoencoderKL
     EMBED_DIM: 4
-    PRETRAINED_MODEL: hf://iic/ACE-0.6B-1024px@models/vae/vae.bin
+    PRETRAINED_MODEL: hf://scepter-studio/ACE-0.6B-1024px@models/vae/vae.bin
     IGNORE_KEYS: []
     #
     ENCODER:
@@ -122,8 +122,8 @@ MODEL:
   #
   COND_STAGE_MODEL:
     NAME: T5EmbedderHF
-    PRETRAINED_MODEL: hf://iic/ACE-0.6B-1024px@models/text_encoder/t5-v1_1-xxl/
-    TOKENIZER_PATH: hf://iic/ACE-0.6B-1024px@models/tokenizer/t5-v1_1-xxl
+    PRETRAINED_MODEL: hf://scepter-studio/ACE-0.6B-1024px@models/text_encoder/t5-v1_1-xxl/
+    TOKENIZER_PATH: hf://scepter-studio/ACE-0.6B-1024px@models/tokenizer/t5-v1_1-xxl
     LENGTH: 120
     T5_DTYPE: bfloat16
     ADDED_IDENTIFIER: [ '{image}', '{caption}', '{mask}', '{ref_image}', '{image1}', '{image2}', '{image3}', '{image4}', '{image5}', '{image6}', '{image7}', '{image8}', '{image9}' ]
