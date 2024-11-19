@@ -1394,7 +1394,7 @@ class ChatBotUI(object):
 
 
 if __name__ == '__main__':
-    cfg = Config(cfg_file="config/chatbot_ui.yaml")
+    cfg = "config/chatbot_ui.yaml"
     with gr.Blocks() as demo:
         chatbot = ChatBotUI(cfg)
         chatbot.create_ui()
