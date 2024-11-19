@@ -1,20 +1,18 @@
-WORK_DIR: ./cache/chatbot
+WORK_DIR: chatbot
 FILE_SYSTEM:
   - NAME: LocalFs
     TEMP_DIR: ./cache
-  - NAME: HttpFs
+  - NAME: ModelscopeFs
     TEMP_DIR: ./cache
   - NAME: HuggingfaceFs
     TEMP_DIR: ./cache
-  - NAME: ModelscopeFs
-    TEMP_DIR: ./cache
 #
 ENABLE_I2V: False
+SKIP_EXAMPLES: True
 #
 MODEL:
   EDIT_MODEL:
-    MODEL_CFG_DIR: config/models/
-    DEFAULT: ace_0.6b_1024
+    MODEL_CFG_DIR: scepter/methods/studio/chatbot/models/
   I2V:
     MODEL_NAME: CogVideoX-5b-I2V
     MODEL_DIR: ms://ZhipuAI/CogVideoX-5b-I2V/
