@@ -1,8 +1,8 @@
 huggingface_hub
-scepter>=1.1.0
 diffusers
 transformers
 gradio_imageslider
-torch==2.4.0
+torch==2.4.1
 torchvision
+git+https://github.com/modelscope/scepter.git@v1.3.0_dev#egg=scepter
 gradio==4.44.1
