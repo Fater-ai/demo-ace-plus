@@ -59,6 +59,11 @@ class ChatBotUI(object):
             print(f"Import diffusers failed, please install or upgrade diffusers. Error information: {e}")
 
         cfg = Config(cfg_file=cfg_general_file)
+        if cfg.have("FILE_SYSTEM"):
+            for file_sys in cfg.FILE_SYSTEM:
+                fs_prefix = FS.init_fs_client(file_sys)
+        else:
+            fs_prefix = FS.init_fs_client(cfg)
         cfg.WORK_DIR = os.path.join(root_work_dir, cfg.WORK_DIR)
         if not FS.exists(cfg.WORK_DIR):
             FS.make_dir(cfg.WORK_DIR)
