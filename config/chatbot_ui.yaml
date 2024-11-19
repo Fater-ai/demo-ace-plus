@@ -12,7 +12,7 @@ SKIP_EXAMPLES: True
 #
 MODEL:
   EDIT_MODEL:
-    MODEL_CFG_DIR: scepter/methods/studio/chatbot/models/
+    MODEL_CFG_DIR: config/models/
   I2V:
     MODEL_NAME: CogVideoX-5b-I2V
     MODEL_DIR: ms://ZhipuAI/CogVideoX-5b-I2V/
