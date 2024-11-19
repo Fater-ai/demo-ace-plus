@@ -82,8 +82,8 @@ class ChatBotUI(object):
             self.model_choices[model_name] = model_cfg
         print('Models: ', self.model_choices.keys())
 
-        FS.get_object_to_local_file("ms://AI-ModelScope/FLUX.1-dev@flux1-dev.safetensors")
-        FS.get_object_to_local_file("ms://AI-ModelScope/FLUX.1-dev@ae.safetensors")
+        FS.get_from("ms://AI-ModelScope/FLUX.1-dev@flux1-dev.safetensors")
+        FS.get_from("ms://AI-ModelScope/FLUX.1-dev@ae.safetensors")
         FS.get_dir_to_local_dir("ms://AI-ModelScope/FLUX.1-dev@text_encoder_2/")
         FS.get_dir_to_local_dir("ms://AI-ModelScope/FLUX.1-dev@tokenizer_2/")
         FS.get_dir_to_local_dir("ms://AI-ModelScope/FLUX.1-dev@text_encoder/")
