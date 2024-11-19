@@ -31,8 +31,8 @@ from scepter.modules.utils.file_system import FS
 from scepter.studio.utils.env import init_env
 from importlib.metadata import version
 
-from .example import get_examples
-from .utils import load_image
+from example import get_examples
+from utils import load_image
 
 csv.field_size_limit(sys.maxsize)
 
