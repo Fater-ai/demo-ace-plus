@@ -746,7 +746,7 @@ class ChatBotUI(object):
             outputs=[self.history, self.chatbot, self.text, self.gallery])
 
         ########################################
-        @spaces.GPU(duration=120)
+        @spaces.GPU(duration=240)
         def run_chat(
                      message,
                      legacy_image,
