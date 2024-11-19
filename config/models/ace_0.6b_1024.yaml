@@ -201,7 +201,7 @@ REFINER_MODEL:
         MODE_SCALE: 1.29
     DIFFUSION_MODEL:
       NAME: FluxMR
-      PRETRAINED_MODEL: hf://black-forest-labs/FLUX.1-dev@flux1-dev.safetensors
+      PRETRAINED_MODEL: ms://AI-ModelScope/FLUX.1-dev@flux1-dev.safetensors
       IN_CHANNELS: 64
       OUT_CHANNELS: 64
       HIDDEN_SIZE: 3072
@@ -221,7 +221,7 @@ REFINER_MODEL:
     FIRST_STAGE_MODEL:
       NAME: AutoencoderKLFlux
       EMBED_DIM: 16
-      PRETRAINED_MODEL:  hf://black-forest-labs/FLUX.1-dev@ae.safetensors
+      PRETRAINED_MODEL:  ms://AI-ModelScope/FLUX.1-dev@ae.safetensors
       IGNORE_KEYS: [ ]
       BATCH_SIZE: 8
       USE_CONV: False
@@ -262,9 +262,9 @@ REFINER_MODEL:
       T5_MODEL:
         NAME: HFEmbedder
         HF_MODEL_CLS: T5EncoderModel
-        MODEL_PATH: hf://black-forest-labs/FLUX.1-dev@text_encoder_2/
+        MODEL_PATH: ms://AI-ModelScope/FLUX.1-dev@text_encoder_2/
         HF_TOKENIZER_CLS: T5Tokenizer
-        TOKENIZER_PATH: hf://black-forest-labs/FLUX.1-dev@tokenizer_2/
+        TOKENIZER_PATH: ms://AI-ModelScope/FLUX.1-dev@tokenizer_2/
         MAX_LENGTH: 512
         OUTPUT_KEY: last_hidden_state
         D_TYPE: bfloat16
@@ -273,9 +273,9 @@ REFINER_MODEL:
       CLIP_MODEL:
         NAME: HFEmbedder
         HF_MODEL_CLS: CLIPTextModel
-        MODEL_PATH: hf://black-forest-labs/FLUX.1-dev@text_encoder/
+        MODEL_PATH: ms://AI-ModelScope/FLUX.1-dev@text_encoder/
         HF_TOKENIZER_CLS: CLIPTokenizer
-        TOKENIZER_PATH: hf://black-forest-labs/FLUX.1-dev@tokenizer/
+        TOKENIZER_PATH: ms://AI-ModelScope/FLUX.1-dev@tokenizer/
         MAX_LENGTH: 77
         OUTPUT_KEY: pooler_output
         D_TYPE: bfloat16
