@@ -282,9 +282,9 @@ class ACEInference(DiffusionInference):
         self.size_factor = cfg.get('SIZE_FACTOR', 8)
         self.decoder_bias = cfg.get('DECODER_BIAS', 0)
         self.default_n_prompt = cfg.get('DEFAULT_N_PROMPT', '')
-        self.dynamic_load(self.cond_stage_model, 'cond_stage_model')
-        self.dynamic_load(self.diffusion_model, 'diffusion_model')
-        self.dynamic_load(self.first_stage_model, 'first_stage_model')
+        #self.dynamic_load(self.cond_stage_model, 'cond_stage_model')
+        #self.dynamic_load(self.diffusion_model, 'diffusion_model')
+        #self.dynamic_load(self.first_stage_model, 'first_stage_model')
 
     @torch.no_grad()
     def encode_first_stage(self, x, **kwargs):
@@ -396,9 +396,9 @@ class ACEInference(DiffusionInference):
         if use_ace and (not is_txt_image or refiner_scale <= 0):
             ctx, null_ctx = {}, {}
             # Get Noise Shape
-            if use_dynamic_model: self.dynamic_load(self.first_stage_model, 'first_stage_model')
+            self.dynamic_load(self.first_stage_model, 'first_stage_model')
             x = self.encode_first_stage(image)
-            if self.use_dynamic_model: self.dynamic_unload(self.first_stage_model,
+            self.dynamic_unload(self.first_stage_model,
                                 'first_stage_model',
                                 skip_loaded=True)
             noise = [
@@ -414,7 +414,7 @@ class ACEInference(DiffusionInference):
             ctx['x_mask'] = null_ctx['x_mask'] = cond_mask
 
             # Encode Prompt
-            if use_dynamic_model: self.dynamic_load(self.cond_stage_model, 'cond_stage_model')
+            self.dynamic_load(self.cond_stage_model, 'cond_stage_model')
             function_name, dtype = self.get_function_info(self.cond_stage_model)
             cont, cont_mask = getattr(get_model(self.cond_stage_model),
                                       function_name)(prompt)
@@ -424,14 +424,14 @@ class ACEInference(DiffusionInference):
                                                 function_name)(n_prompt)
             null_cont, null_cont_mask = self.cond_stage_embeddings(
                 prompt, edit_image, null_cont, null_cont_mask)
-            if self.use_dynamic_model: self.dynamic_unload(self.cond_stage_model,
+            self.dynamic_unload(self.cond_stage_model,
                                 'cond_stage_model',
                                 skip_loaded=False)
             ctx['crossattn'] = cont
             null_ctx['crossattn'] = null_cont
 
             # Encode Edit Images
-            if use_dynamic_model: self.dynamic_load(self.first_stage_model, 'first_stage_model')
+            self.dynamic_load(self.first_stage_model, 'first_stage_model')
             edit_image = [to_device(i, strict=False) for i in edit_image]
             edit_image_mask = [to_device(i, strict=False) for i in edit_image_mask]
             e_img, e_mask = [], []
@@ -442,14 +442,14 @@ class ACEInference(DiffusionInference):
                     m = [None] * len(u)
                 e_img.append(self.encode_first_stage(u, **kwargs))
                 e_mask.append([self.interpolate_func(i) for i in m])
-            if self.use_dynamic_model: self.dynamic_unload(self.first_stage_model,
+            self.dynamic_unload(self.first_stage_model,
                                 'first_stage_model',
                                 skip_loaded=True)
             null_ctx['edit'] = ctx['edit'] = e_img
             null_ctx['edit_mask'] = ctx['edit_mask'] = e_mask
 
             # Diffusion Process
-            if use_dynamic_model: self.dynamic_load(self.diffusion_model, 'diffusion_model')
+            self.dynamic_load(self.diffusion_model, 'diffusion_model')
             function_name, dtype = self.get_function_info(self.diffusion_model)
             with torch.autocast('cuda',
                                 enabled=dtype in ('float16', 'bfloat16'),
@@ -490,15 +490,15 @@ class ACEInference(DiffusionInference):
                     guide_rescale=guide_rescale,
                     return_intermediate=None,
                     **kwargs)
-            if self.use_dynamic_model: self.dynamic_unload(self.diffusion_model,
+            self.dynamic_unload(self.diffusion_model,
                                 'diffusion_model',
                                 skip_loaded=False)
 
             # Decode to Pixel Space
-            if use_dynamic_model: self.dynamic_load(self.first_stage_model, 'first_stage_model')
+            self.dynamic_load(self.first_stage_model, 'first_stage_model')
             samples = unpack_tensor_into_imagelist(latent, x_shapes)
             x_samples = self.decode_first_stage(samples)
-            if self.use_dynamic_model: self.dynamic_unload(self.first_stage_model,
+            self.dynamic_unload(self.first_stage_model,
                                 'first_stage_model',
                                 skip_loaded=False)
             x_samples = [x.squeeze(0) for x in x_samples]
