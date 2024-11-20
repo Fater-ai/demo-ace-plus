@@ -24,7 +24,7 @@ import transformers
 from PIL import Image
 from transformers import AutoModel, AutoTokenizer
 
-from scepter.modules.inference.ace_inference import ACEInference
+from ace_inference import ACEInference
 from scepter.modules.utils.config import Config
 from scepter.modules.utils.directory import get_md5
 from scepter.modules.utils.file_system import FS
