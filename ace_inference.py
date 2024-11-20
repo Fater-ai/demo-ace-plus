@@ -20,7 +20,7 @@ from scepter.modules.model.utils.basic_utils import (
 from scepter.modules.utils.distribute import we
 from scepter.modules.utils.logger import get_logger
 
-from scepter.modules.diffusion_inference import DiffusionInference, get_model
+from scepter.modules.inference.diffusion_inference import DiffusionInference, get_model
 
 
 def process_edit_image(images,
