@@ -84,7 +84,7 @@ class TextEmbedding(nn.Module):
         super().__init__()
         self.pos = nn.Parameter(data=torch.zeros(embedding_shape))
 
-class ACEFluxLCInference(DiffusionInference):
+class ACEInference(DiffusionInference):
     def __init__(self, logger=None):
         if logger is None:
             logger = get_logger(name='scepter')
