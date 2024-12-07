@@ -6,3 +6,4 @@ torch==2.4.0
 torchvision
 scepter
 gradio==4.44.1
+
