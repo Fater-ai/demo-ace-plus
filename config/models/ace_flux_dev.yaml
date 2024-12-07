@@ -1,0 +1,203 @@
+NAME: ACE_FLUX.1_dev
+IS_DEFAULT: True
+USE_DYNAMIC_MODEL: False
+INFERENCE_TYPE: ACE_FLUX
+MAX_SEQ_LENGTH: 4096
+SRC_MAX_SEQ_LENGTH: 4096
+DEFAULT_PARAS:
+  PARAS:
+  #
+  INPUT:
+    INPUT_IMAGE:
+    INPUT_MASK:
+    TASK:
+    PROMPT: ""
+    OUTPUT_HEIGHT: 1024
+    OUTPUT_WIDTH: 1024
+    SAMPLER: flow_euler
+    SAMPLE_STEPS: 50
+    GUIDE_SCALE: 3.5
+    SEED: -1
+    TAR_INDEX: 0
+    ALIGN: False
+  OUTPUT:
+    LATENT:
+    IMAGES:
+    SEED:
+  MODULES_PARAS:
+    FIRST_STAGE_MODEL:
+      FUNCTION:
+        - NAME: encode
+          DTYPE: bfloat16
+          INPUT: [ "IMAGE" ]
+        - NAME: decode
+          DTYPE: bfloat16
+          INPUT: [ "LATENT" ]
+      PARAS:
+        SCALE_FACTOR: 1.5305
+        SHIFT_FACTOR: 0.0609
+        SIZE_FACTOR: 8
+    DIFFUSION_MODEL:
+      FUNCTION:
+        - NAME: forward
+          DTYPE: bfloat16
+          INPUT: [ "SAMPLE_STEPS", "SAMPLE", "GUIDE_SCALE" ]
+    COND_STAGE_MODEL:
+      FUNCTION:
+        - NAME: encode_list_of_list
+          DTYPE: bfloat16
+          INPUT: [ "PROMPT" ]
+    REF_COND_STAGE_MODEL:
+      FUNCTION:
+        - NAME: encode_list_of_list
+          DTYPE: bfloat16
+          INPUT: [ "IMAGE" ]
+
+#
+MODEL:
+  NAME: LatentDiffusionFluxEdit
+  PARAMETERIZATION: rf
+  PRETRAINED_MODEL:
+  IGNORE_KEYS: [ ]
+  SIZE_FACTOR: 8
+  TEXT_IDENTIFIER: [ '{image}', '{image1}', '{image2}', '{image3}', '{image4}', '{image5}', '{image6}', '{image7}', '{image8}', '{image9}' ]
+  IMAGE_TOKEN: '<img>'
+  USE_TEXT_POS_EMBEDDINGS: True
+  DIFFUSION:
+    # NAME DESCRIPTION:  TYPE:  default: 'DiffusionFluxRF'
+    NAME: DiffusionFluxRF
+    PREDICTION_TYPE: raw
+    # NOISE_SCHEDULER DESCRIPTION:  TYPE:  default: ''
+    NOISE_SCHEDULER:
+      # NAME DESCRIPTION:  TYPE:  default: 'FlowMatchSigmaScheduler'
+      NAME: FlowMatchFluxShiftScheduler
+      # SHIFT DESCRIPTION: Use timestamp shift or not, default is True. TYPE: bool default: True
+      SHIFT: True
+      # SIGMOID_SCALE DESCRIPTION: The scale of sigmoid function for sampling timesteps. TYPE: int default: 1
+      SIGMOID_SCALE: 1
+      # BASE_SHIFT DESCRIPTION: The base shift factor for the timestamp. TYPE: float default: 0.5
+      BASE_SHIFT: 0.5
+      # MAX_SHIFT DESCRIPTION: The max shift factor for the timestamp. TYPE: float default: 1.15
+      MAX_SHIFT: 1.15
+      #
+  DIFFUSION_MODEL:
+    # NAME DESCRIPTION:  TYPE:  default: 'Flux'
+    NAME: FluxEdit
+    PRETRAINED_MODEL: 
+    DIFFUSERS_LORA_MODEL:
+    PRETRAIN_ADAPTER:
+    # IN_CHANNELS DESCRIPTION: model's input channels. TYPE: int default: 64
+    IN_CHANNELS: 64
+    # OUT_CHANNELS DESCRIPTION: model's input channels. TYPE: int default: 64
+    OUT_CHANNELS: 64
+    # HIDDEN_SIZE DESCRIPTION: model's hidden size. TYPE: int default: 1024
+    HIDDEN_SIZE: 3072
+    REDUX_DIM: 1152
+    # NUM_HEADS DESCRIPTION: number of heads in the transformer. TYPE: int default: 16
+    NUM_HEADS: 24
+    # AXES_DIM DESCRIPTION: dimensions of the axes of the positional encoding. TYPE: list default: [16, 56, 56]
+    AXES_DIM: [ 16, 56, 56 ]
+    # THETA DESCRIPTION: theta for positional encoding. TYPE: int default: 10000
+    THETA: 10000
+    # VEC_IN_DIM DESCRIPTION: dimension of the vector input. TYPE: int default: 768
+    VEC_IN_DIM: 768
+    # GUIDANCE_EMBED DESCRIPTION: whether to use guidance embedding. TYPE: bool default: False
+    GUIDANCE_EMBED: True
+    # CONTEXT_IN_DIM DESCRIPTION: dimension of the context input. TYPE: int default: 4096
+    CONTEXT_IN_DIM: 4096
+    # MLP_RATIO DESCRIPTION: ratio of mlp hidden size to hidden size. TYPE: float default: 4.0
+    MLP_RATIO: 4.0
+    # QKV_BIAS DESCRIPTION: whether to use bias in qkv projection. TYPE: bool default: True
+    QKV_BIAS: True
+    # DEPTH DESCRIPTION: number of transformer blocks. TYPE: int default: 19
+    DEPTH: 19
+    # DEPTH_SINGLE_BLOCKS DESCRIPTION: number of transformer blocks in the single stream block. TYPE: int default: 38
+    DEPTH_SINGLE_BLOCKS: 38
+    ATTN_BACKEND: flash_attn
+
+  #
+  FIRST_STAGE_MODEL:
+    NAME: AutoencoderKLFlux
+    EMBED_DIM: 16
+    PRETRAINED_MODEL: 
+    IGNORE_KEYS: [ ]
+    BATCH_SIZE: 8
+    USE_CONV: False
+    SCALE_FACTOR: 0.3611
+    SHIFT_FACTOR: 0.1159
+    #
+    ENCODER:
+      NAME: Encoder
+      USE_CHECKPOINT: True
+      CH: 128
+      OUT_CH: 3
+      NUM_RES_BLOCKS: 2
+      IN_CHANNELS: 3
+      ATTN_RESOLUTIONS: [ ]
+      CH_MULT: [ 1, 2, 4, 4 ]
+      Z_CHANNELS: 16
+      DOUBLE_Z: True
+      DROPOUT: 0.0
+      RESAMP_WITH_CONV: True
+    #
+    DECODER:
+      NAME: Decoder
+      USE_CHECKPOINT: True
+      CH: 128
+      OUT_CH: 3
+      NUM_RES_BLOCKS: 2
+      IN_CHANNELS: 3
+      ATTN_RESOLUTIONS: [ ]
+      CH_MULT: [ 1, 2, 4, 4 ]
+      Z_CHANNELS: 16
+      DROPOUT: 0.0
+      RESAMP_WITH_CONV: True
+      GIVE_PRE_END: False
+      TANH_OUT: False
+  #
+  COND_STAGE_MODEL:
+    # NAME DESCRIPTION:  TYPE:  default: 'T5PlusClipFluxEmbedder'
+    NAME: T5PlusClipFluxEmbedder
+    # T5_MODEL DESCRIPTION:  TYPE:  default: ''
+    T5_MODEL:
+      # NAME DESCRIPTION:  TYPE:  default: 'HFEmbedder'
+      NAME: HFEmbedder
+      # HF_MODEL_CLS DESCRIPTION: huggingface cls in transfomer TYPE: NoneType default: None
+      HF_MODEL_CLS: T5EncoderModel
+      # MODEL_PATH DESCRIPTION: model folder path TYPE: NoneType default: None
+      MODEL_PATH: 
+      # HF_TOKENIZER_CLS DESCRIPTION: huggingface cls in transfomer TYPE: NoneType default: None
+      HF_TOKENIZER_CLS: T5Tokenizer
+      # TOKENIZER_PATH DESCRIPTION: tokenizer folder path TYPE: NoneType default: None
+      TOKENIZER_PATH: 
+      ADDED_IDENTIFIER: [ '<img>','{image}', '{caption}', '{mask}', '{ref_image}', '{image1}', '{image2}', '{image3}', '{image4}', '{image5}', '{image6}', '{image7}', '{image8}', '{image9}' ]
+      # MAX_LENGTH DESCRIPTION: max length of input TYPE: int default: 77
+      MAX_LENGTH: 512
+      # OUTPUT_KEY DESCRIPTION: output key TYPE: str default: 'last_hidden_state'
+      OUTPUT_KEY: last_hidden_state
+      # D_TYPE DESCRIPTION: dtype TYPE: str default: 'bfloat16'
+      D_TYPE: bfloat16
+      # BATCH_INFER DESCRIPTION: batch infer TYPE: bool default: False
+      BATCH_INFER: False
+      CLEAN: whitespace
+    # CLIP_MODEL DESCRIPTION:  TYPE:  default: ''
+    CLIP_MODEL:
+      # NAME DESCRIPTION:  TYPE:  default: 'HFEmbedder'
+      NAME: HFEmbedder
+      # HF_MODEL_CLS DESCRIPTION: huggingface cls in transfomer TYPE: NoneType default: None
+      HF_MODEL_CLS: CLIPTextModel
+      # MODEL_PATH DESCRIPTION: model folder path TYPE: NoneType default: None
+      MODEL_PATH: 
+      # HF_TOKENIZER_CLS DESCRIPTION: huggingface cls in transfomer TYPE: NoneType default: None
+      HF_TOKENIZER_CLS: CLIPTokenizer
+      # TOKENIZER_PATH DESCRIPTION: tokenizer folder path TYPE: NoneType default: None
+      TOKENIZER_PATH: 
+      # MAX_LENGTH DESCRIPTION: max length of input TYPE: int default: 77
+      MAX_LENGTH: 77
+      # OUTPUT_KEY DESCRIPTION: output key TYPE: str default: 'last_hidden_state'
+      OUTPUT_KEY: pooler_output
+      # D_TYPE DESCRIPTION: dtype TYPE: str default: 'bfloat16'
+      D_TYPE: bfloat16
+      # BATCH_INFER DESCRIPTION: batch infer TYPE: bool default: False
+      BATCH_INFER: True
+      CLEAN: whitespace
