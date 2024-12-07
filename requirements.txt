@@ -4,5 +4,5 @@ transformers
 gradio_imageslider
 torch==2.4.0
 torchvision
-git+https://github.com/modelscope/scepter.git@v1.3.0_dev#egg=scepter
+scepter.git
 gradio==4.44.1
