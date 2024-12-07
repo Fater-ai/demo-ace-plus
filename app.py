@@ -15,6 +15,7 @@ import spaces
 
 subprocess.run(shlex.split('pip install flash-attn --no-build-isolation'),
                env=os.environ | {'FLASH_ATTENTION_SKIP_CUDA_BUILD': "TRUE"})
+subprocess.run(shlex.split('pip install scepter'))
 
 import cv2
 import gradio as gr
