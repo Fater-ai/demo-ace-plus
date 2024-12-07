@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 # Copyright (c) Alibaba, Inc. and its affiliates.
-import spaces
 import base64
 import copy
 import glob
@@ -12,7 +11,8 @@ import shlex
 import string
 import subprocess
 import threading
- 
+import spaces
+
 subprocess.run(shlex.split('pip install flash-attn --no-build-isolation'),
                env=os.environ | {'FLASH_ATTENTION_SKIP_CUDA_BUILD': "TRUE"})
 
@@ -45,9 +45,6 @@ video_sty = '\U0001f3a5'  # 🎥
 
 lock = threading.Lock()
 
-inference_dict = {
-    "ACE": ACEInference
-}
 
 class ChatBotUI(object):
     def __init__(self,
@@ -85,14 +82,15 @@ class ChatBotUI(object):
             self.model_choices[model_name] = model_cfg
         print('Models: ', self.model_choices.keys())
 
-        FS.get_from("ms://AI-ModelScope/FLUX.1-dev@ae.safetensors")
-        FS.get_dir_to_local_dir("ms://AI-ModelScope/FLUX.1-dev@text_encoder_2/")
-        FS.get_dir_to_local_dir("ms://AI-ModelScope/FLUX.1-dev@tokenizer_2/")
-        FS.get_dir_to_local_dir("ms://AI-ModelScope/FLUX.1-dev@text_encoder/")
-        FS.get_dir_to_local_dir("ms://AI-ModelScope/FLUX.1-dev@tokenizer/")
-
+        #FS.get_from("ms://AI-ModelScope/FLUX.1-dev@flux1-dev.safetensors")
+        #FS.get_from("ms://AI-ModelScope/FLUX.1-dev@ae.safetensors")
+        #FS.get_dir_to_local_dir("ms://AI-ModelScope/FLUX.1-dev@text_encoder_2/")
+        #FS.get_dir_to_local_dir("ms://AI-ModelScope/FLUX.1-dev@tokenizer_2/")
+        #FS.get_dir_to_local_dir("ms://AI-ModelScope/FLUX.1-dev@text_encoder/")
+        #FS.get_dir_to_local_dir("ms://AI-ModelScope/FLUX.1-dev@tokenizer/")
+        
         assert len(self.model_choices) > 0
-        if self.default_model_name == "": self.default_model_name = self.model_choices.keys()[0]
+        if self.default_model_name == "": self.default_model_name = list(self.model_choices.keys())[0]
         self.model_name = self.default_model_name
         self.pipe = ACEInference()
         self.pipe.init_from_cfg(self.model_choices[self.default_model_name])
@@ -149,39 +147,39 @@ class ChatBotUI(object):
                 },
                 {
                     'role':
-                        'user',
+                    'user',
                     'content':
-                        'Create an imaginative video descriptive caption or modify an earlier caption for the user input : "a girl is on the beach"',
+                    'Create an imaginative video descriptive caption or modify an earlier caption for the user input : "a girl is on the beach"',
                 },
                 {
                     'role':
-                        'assistant',
+                    'assistant',
                     'content':
-                        "A radiant woman stands on a deserted beach, arms outstretched, wearing a beige trench coat, white blouse, light blue jeans, and chic boots, against a backdrop of soft sky and sea. Moments later, she is seen mid-twirl, arms exuberant, with the lighting suggesting dawn or dusk. Then, she runs along the beach, her attire complemented by an off-white scarf and black ankle boots, the tranquil sea behind her. Finally, she holds a paper airplane, her pose reflecting joy and freedom, with the ocean's gentle waves and the sky's soft pastel hues enhancing the serene ambiance.",
+                    "A radiant woman stands on a deserted beach, arms outstretched, wearing a beige trench coat, white blouse, light blue jeans, and chic boots, against a backdrop of soft sky and sea. Moments later, she is seen mid-twirl, arms exuberant, with the lighting suggesting dawn or dusk. Then, she runs along the beach, her attire complemented by an off-white scarf and black ankle boots, the tranquil sea behind her. Finally, she holds a paper airplane, her pose reflecting joy and freedom, with the ocean's gentle waves and the sky's soft pastel hues enhancing the serene ambiance.",
                 },
                 {
                     'role':
-                        'user',
+                    'user',
                     'content':
-                        'Create an imaginative video descriptive caption or modify an earlier caption for the user input : "A man jogging on a football field"',
+                    'Create an imaginative video descriptive caption or modify an earlier caption for the user input : "A man jogging on a football field"',
                 },
                 {
                     'role':
-                        'assistant',
+                    'assistant',
                     'content':
-                        "A determined man in athletic attire, including a blue long-sleeve shirt, black shorts, and blue socks, jogs around a snow-covered soccer field, showcasing his solitary exercise in a quiet, overcast setting. His long dreadlocks, focused expression, and the serene winter backdrop highlight his dedication to fitness. As he moves, his attire, consisting of a blue sports sweatshirt, black athletic pants, gloves, and sneakers, grips the snowy ground. He is seen running past a chain-link fence enclosing the playground area, with a basketball hoop and children's slide, suggesting a moment of solitary exercise amidst the empty field.",
+                    "A determined man in athletic attire, including a blue long-sleeve shirt, black shorts, and blue socks, jogs around a snow-covered soccer field, showcasing his solitary exercise in a quiet, overcast setting. His long dreadlocks, focused expression, and the serene winter backdrop highlight his dedication to fitness. As he moves, his attire, consisting of a blue sports sweatshirt, black athletic pants, gloves, and sneakers, grips the snowy ground. He is seen running past a chain-link fence enclosing the playground area, with a basketball hoop and children's slide, suggesting a moment of solitary exercise amidst the empty field.",
                 },
                 {
                     'role':
-                        'user',
+                    'user',
                     'content':
-                        'Create an imaginative video descriptive caption or modify an earlier caption for the user input : " A woman is dancing, HD footage, close-up"',
+                    'Create an imaginative video descriptive caption or modify an earlier caption for the user input : " A woman is dancing, HD footage, close-up"',
                 },
                 {
                     'role':
-                        'assistant',
+                    'assistant',
                     'content':
-                        'A young woman with her hair in an updo and wearing a teal hoodie stands against a light backdrop, initially looking over her shoulder with a contemplative expression. She then confidently makes a subtle dance move, suggesting rhythm and movement. Next, she appears poised and focused, looking directly at the camera. Her expression shifts to one of introspection as she gazes downward slightly. Finally, she dances with confidence, her left hand over her heart, symbolizing a poignant moment, all while dressed in the same teal hoodie against a plain, light-colored background.',
+                    'A young woman with her hair in an updo and wearing a teal hoodie stands against a light backdrop, initially looking over her shoulder with a contemplative expression. She then confidently makes a subtle dance move, suggesting rhythm and movement. Next, she appears poised and focused, looking directly at the camera. Her expression shifts to one of introspection as she gazes downward slightly. Finally, she dances with confidence, her left hand over her heart, symbolizing a poignant moment, all while dressed in the same teal hoodie against a plain, light-colored background.',
                 },
             ]
 
@@ -348,6 +346,7 @@ class ChatBotUI(object):
                             show_download_button=True,
                             elem_id='image_viewer')
 
+
                 with gr.Accordion(label='Setting', open=False):
                     with gr.Row():
                         self.model_name_dd = gr.Dropdown(
@@ -373,6 +372,7 @@ class ChatBotUI(object):
                             label='Refiner Prompt',
                             container=False)
 
+
                     with gr.Row():
                         with gr.Column(scale=8, min_width=500):
                             with gr.Row():
@@ -393,11 +393,10 @@ class ChatBotUI(object):
                                                          visible=self.pipe.input.get("guide_rescale", None) is not None,
                                                          label='Rescale')
                                 self.refiner_scale = gr.Slider(minimum=-0.1,
-                                                               maximum=1.0,
-                                                               value=self.pipe.input.get("refiner_scale", 0.5),
-                                                               visible=self.pipe.input.get("refiner_scale",
-                                                                                           None) is not None,
-                                                               label='Refiner Scale')
+                                                         maximum=1.0,
+                                                         value=self.pipe.input.get("refiner_scale", -1),
+                                                         visible=self.pipe.input.get("refiner_scale", None) is not None,
+                                                         label='Refiner Scale')
                                 self.seed = gr.Slider(minimum=-1,
                                                       maximum=10000000,
                                                       value=-1,
@@ -486,7 +485,7 @@ class ChatBotUI(object):
                             show_progress=False):
                     with gr.Column(scale=1, min_width=100, visible=False) as self.upload_panel:
                         self.upload_btn = gr.Button(value=upload_sty +
-                                                          ' Upload',
+                                                    ' Upload',
                                                     variant='secondary')
                     with gr.Column(scale=5, min_width=500):
                         self.text = gr.Textbox(
@@ -498,7 +497,7 @@ class ChatBotUI(object):
                                                   variant='primary')
                     with gr.Column(scale=1, min_width=100):
                         self.retry_btn = gr.Button(value=refresh_sty +
-                                                         ' Retry',
+                                                   ' Retry',
                                                    variant='secondary')
                     with gr.Column(scale=1, min_width=100):
                         self.mode_checkbox = gr.Checkbox(
@@ -507,7 +506,7 @@ class ChatBotUI(object):
                     with gr.Column(scale=(1 if self.enable_i2v else 0),
                                    min_width=0):
                         self.video_gen_btn = gr.Button(value=video_sty +
-                                                             ' Gen Video',
+                                                       ' Gen Video',
                                                        variant='secondary',
                                                        visible=self.enable_i2v)
                     with gr.Column(scale=(1 if self.enable_i2v else 0),
@@ -529,7 +528,7 @@ class ChatBotUI(object):
     def set_callbacks(self, *args, **kwargs):
 
         ########################################
-        @spaces.GPU(duration=60)
+        #@spaces.GPU(duration=60)
         def change_model(model_name):
             if model_name not in self.model_choices:
                 gr.Info('The provided model name is not a valid choice!')
@@ -539,24 +538,21 @@ class ChatBotUI(object):
                 lock.acquire()
                 del self.pipe
                 torch.cuda.empty_cache()
-                torch.cuda.ipc_collect()
-                pipe_cfg = self.model_choices[model_name]
-                infer_name = pipe_cfg.get("INFERENCE_TYPE", "ACE")
-                self.pipe = inference_dict[infer_name]()
-                self.pipe.init_from_cfg(pipe_cfg)
+                self.pipe = ACEInference()
+                self.pipe.init_from_cfg(self.model_choices[model_name])
                 self.model_name = model_name
                 lock.release()
 
             return (model_name, gr.update(), gr.update(),
                     gr.Slider(
-                        value=self.pipe.input.get("sample_steps", 20),
-                        visible=self.pipe.input.get("sample_steps", None) is not None),
+                              value=self.pipe.input.get("sample_steps", 20),
+                              visible=self.pipe.input.get("sample_steps", None) is not None),
                     gr.Slider(
                         value=self.pipe.input.get("guide_scale", 4.5),
                         visible=self.pipe.input.get("guide_scale", None) is not None),
                     gr.Slider(
-                        value=self.pipe.input.get("guide_rescale", 0.5),
-                        visible=self.pipe.input.get("guide_rescale", None) is not None),
+                              value=self.pipe.input.get("guide_rescale", 0.5),
+                              visible=self.pipe.input.get("guide_rescale", None) is not None),
                     gr.Slider(
                         value=self.pipe.input.get("output_height", 1024),
                         visible=self.pipe.input.get("output_height", None) is not None),
@@ -567,9 +563,9 @@ class ChatBotUI(object):
                         value=self.pipe.input.get("refiner_prompt", ""),
                         visible=self.pipe.input.get("refiner_prompt", None) is not None),
                     gr.Slider(
-                        value=self.pipe.input.get("refiner_scale", 0.5),
-                        visible=self.pipe.input.get("refiner_scale", None) is not None
-                    ),
+                              value=self.pipe.input.get("refiner_scale", -1),
+                              visible=self.pipe.input.get("refiner_scale", None) is not None
+                        ),
                     gr.Checkbox(
                         value=self.pipe.input.get("use_ace", True),
                         visible=self.pipe.input.get("use_ace", None) is not None
@@ -585,6 +581,7 @@ class ChatBotUI(object):
                 self.cfg_scale, self.rescale, self.output_height,
                 self.output_width, self.refiner_prompt, self.refiner_scale,
                 self.use_ace])
+
 
         def mode_change(mode_check):
             if mode_check:
@@ -607,11 +604,11 @@ class ChatBotUI(object):
                     gr.Column(visible=False),
                     gr.Markdown(value=self.legacy_inst)
                 )
-
         self.mode_checkbox.change(mode_change, inputs=[self.mode_checkbox],
                                   outputs=[self.legacy_group, self.chat_group,
                                            self.chat_btn, self.ui_mode,
                                            self.upload_panel, self.instruction])
+
 
         ########################################
         def generate_gallery(text, images):
@@ -690,9 +687,9 @@ class ChatBotUI(object):
                 messages = copy.deepcopy(self.enhance_ctx)
                 messages.append({
                     'role':
-                        'user',
+                    'user',
                     'content':
-                        f'Create an imaginative video descriptive caption or modify an earlier caption in ENGLISH for the user input: "{prompt}"',
+                    f'Create an imaginative video descriptive caption or modify an earlier caption in ENGLISH for the user input: "{prompt}"',
                 })
                 lock.acquire()
                 outputs = self.enhancer(
@@ -741,33 +738,33 @@ class ChatBotUI(object):
             outputs=[self.history, self.chatbot, self.text, self.gallery])
 
         ########################################
-        @spaces.GPU(duration=240)
+        @spaces.GPU(duration=120)
         def run_chat(
-                message,
-                legacy_image,
-                ui_mode,
-                use_ace,
-                extend_prompt,
-                history,
-                images,
-                use_history,
-                history_result,
-                negative_prompt,
-                cfg_scale,
-                rescale,
-                refiner_prompt,
-                refiner_scale,
-                step,
-                seed,
-                output_h,
-                output_w,
-                video_auto,
-                video_steps,
-                video_frames,
-                video_cfg_scale,
-                video_fps,
-                video_seed,
-                progress=gr.Progress(track_tqdm=True)):
+                     message,
+                     legacy_image,
+                     ui_mode,
+                     use_ace,
+                     extend_prompt,
+                     history,
+                     images,
+                     use_history,
+                     history_result,
+                     negative_prompt,
+                     cfg_scale,
+                     rescale,
+                     refiner_prompt,
+                     refiner_scale,
+                     step,
+                     seed,
+                     output_h,
+                     output_w,
+                     video_auto,
+                     video_steps,
+                     video_frames,
+                     video_cfg_scale,
+                     video_fps,
+                     video_seed,
+                     progress=gr.Progress(track_tqdm=True)):
             legacy_img_ids = []
             if ui_mode == 'legacy':
                 if legacy_image is not None:
@@ -798,12 +795,8 @@ class ChatBotUI(object):
                         )
                         continue
                     placeholder = '{image}' if i == 0 else '{' + f'image{i}' + '}'
-                    if placeholder not in new_message:
-                        new_message = re.sub(f'@{img_id}', placeholder,
-                                             new_message)
-                    else:
-                        new_message = re.sub(f'@{img_id} ', "",
-                                             new_message, 1)
+                    new_message = re.sub(f'@{img_id}', placeholder,
+                                         new_message)
                     img_meta = images[img_id]
                     img_path = img_meta['image']
                     img_mask = img_meta['mask']
@@ -844,7 +837,7 @@ class ChatBotUI(object):
                 history_io=history_io,
                 output_height=output_h,
                 output_width=output_w,
-                sampler=self.pipe.input.get("sampler", "ddim"),
+                sampler='ddim',
                 sample_steps=step,
                 guide_scale=cfg_scale,
                 guide_rescale=rescale,
@@ -915,7 +908,7 @@ class ChatBotUI(object):
                     device='cuda').manual_seed(video_seed)
                 pixel_values = load_image(img.convert('RGB'),
                                           max_num=self.llm_max_num).to(
-                    torch.bfloat16).cuda()
+                                              torch.bfloat16).cuda()
                 prompt = self.captioner.chat(self.llm_tokenizer, pixel_values,
                                              self.llm_prompt,
                                              self.llm_generation_config)
@@ -926,9 +919,9 @@ class ChatBotUI(object):
                     messages = copy.deepcopy(self.enhance_ctx)
                     messages.append({
                         'role':
-                            'user',
+                        'user',
                         'content':
-                            f'Create an imaginative video descriptive caption or modify an earlier caption in ENGLISH for the user input: "{prompt}"',
+                        f'Create an imaginative video descriptive caption or modify an earlier caption in ENGLISH for the user input: "{prompt}"',
                     })
                     lock.acquire()
                     outputs = self.enhancer(
@@ -963,7 +956,7 @@ class ChatBotUI(object):
             return (history, images, gr.Image(value=save_path),
                     history_result, self.get_history(
                 history), gr.update(), gr.update(
-                visible=False), retry_msg)
+                    visible=False), retry_msg)
 
         chat_inputs = [
             self.legacy_image_uploader, self.ui_mode, self.use_ace,
@@ -1013,13 +1006,9 @@ class ChatBotUI(object):
                     w = int(w / ratio)
                 img = img.resize((w, h))
                 edit_image.append(img)
-                if img_mask is not None:
-                    img_mask = img_mask if np.sum(np.array(img_mask)) > 0 else None
                 edit_image_mask.append(
                     img_mask if img_mask is not None else None)
                 edit_task.append(task)
-                if ref1 is not None:
-                    ref1 = ref1 if np.sum(np.array(ref1)) > 0 else None
                 if ref1 is not None:
                     edit_image.append(ref1)
                     edit_image_mask.append(None)
@@ -1059,8 +1048,9 @@ class ChatBotUI(object):
             img_id = get_md5(img_b64)[:12]
             save_path = os.path.join(self.cache_dir, f'{img_id}.png')
             img.convert('RGB').save(save_path)
+            
             return self.get_history(history), gr.update(value=''), gr.update(
-                visible=False),  gr.update(value=save_path), gr.update(value=-1)
+                visible=False), gr.update(value=save_path), gr.update(value=-1)
 
         with self.eg:
             self.example_task = gr.Text(label='Task Name',
@@ -1090,7 +1080,6 @@ class ChatBotUI(object):
                 examples_per_page=4,
                 cache_examples=False,
                 run_on_click=True)
-
         ########################################
         def upload_image():
             return (gr.update(visible=True,
@@ -1181,7 +1170,7 @@ class ChatBotUI(object):
                 image, history, images)
             return gr.update(visible=False), gr.update(
                 visible=True), gr.update(
-                value=self.get_history(history)), history, images
+                    value=self.get_history(history)), history, images
 
         self.sub_btn_1.click(
             submit_upload_image,
@@ -1197,7 +1186,7 @@ class ChatBotUI(object):
                 imagemask, mask_type, history, images)
             return gr.update(visible=False), gr.update(
                 visible=True), gr.update(
-                value=self.get_history(history)), history, images
+                    value=self.get_history(history)), history, images
 
         self.sub_btn_2.click(submit_edit_image,
                              inputs=[
@@ -1411,6 +1400,7 @@ class ChatBotUI(object):
             (None,
              f'This is uploaded image:\n {img_str} image ID is: {img_id}'))
         return history, images, img_id
+
 
 
 if __name__ == '__main__':
