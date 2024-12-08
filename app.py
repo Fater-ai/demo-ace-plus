@@ -88,6 +88,7 @@ class ChatBotUI(object):
         local_folder = FS.get_dir_to_local_dir("hf://black-forest-labs/FLUX.1-dev")
         subprocess.run(shlex.split(f'rm -rf {local_folder}/transformer'))
         subprocess.run(shlex.split(f'rm -rf {local_folder}/vae'))
+        subprocess.run(shlex.split(f'rm -rf {local_folder}/flux1-dev.safetensors'))
         
         assert len(self.model_choices) > 0
         if self.default_model_name == "": self.default_model_name = list(self.model_choices.keys())[0]
