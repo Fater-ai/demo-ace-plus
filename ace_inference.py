@@ -147,6 +147,7 @@ class ACEInference(DiffusionInference):
             self.dynamic_load(self.cond_stage_model, 'cond_stage_model')
             if self.ref_cond_stage_model is not None: self.dynamic_load(self.ref_cond_stage_model, 'ref_cond_stage_model')
             self.dynamic_load(self.diffusion_model, 'diffusion_model')
+            self.diffusion_model["model"].to(torch.bfloat16)
 
     def upscale_resize(self, image, interpolation=T.InterpolationMode.BILINEAR):
         c, H, W = image.shape
