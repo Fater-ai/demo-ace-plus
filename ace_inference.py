@@ -11,7 +11,7 @@ import torch.nn.functional as F
 import torchvision.transforms.functional as TF
 from PIL import Image
 import torchvision.transforms as T
-from scepter.modules.model.registry import DIFFUSIONS
+from scepter.modules.model.registry import DIFFUSIONS,BACKBONES
 from scepter.modules.model.utils.basic_utils import check_list_of_list
 from scepter.modules.model.utils.basic_utils import \
     pack_imagelist_into_tensor_v2 as pack_imagelist_into_tensor
