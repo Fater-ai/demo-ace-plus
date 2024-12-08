@@ -146,8 +146,15 @@ class ACEInference(DiffusionInference):
             self.dynamic_load(self.first_stage_model, 'first_stage_model')
             self.dynamic_load(self.cond_stage_model, 'cond_stage_model')
             if self.ref_cond_stage_model is not None: self.dynamic_load(self.ref_cond_stage_model, 'ref_cond_stage_model')
-            self.dynamic_load(self.diffusion_model, 'diffusion_model')
-            self.diffusion_model["model"].to(torch.bfloat16)
+            # self.dynamic_load(self.diffusion_model, 'diffusion_model')
+            # self.diffusion_model["model"].to(torch.bfloat16)
+            with torch.device("meta"):
+                pretrained_model = self.diffusion_model['cfg'].PRETRAINED_MODEL
+                self.diffusion_model['cfg'].PRETRAINED_MODEL = None
+                self.diffusion_model['model'] = BACKBONES.build(self.diffusion_model['cfg'], logger=self.logger).eval()
+                # self.dynamic_load(self.diffusion_model, 'diffusion_model')
+                self.diffusion_model['model'].load_pretrained_model(pretrained_model)
+                self.diffusion_model['device'] = we.device_id
 
     def upscale_resize(self, image, interpolation=T.InterpolationMode.BILINEAR):
         c, H, W = image.shape
