@@ -34,6 +34,8 @@ from importlib.metadata import version
 
 from example import get_examples
 from utils import load_image
+from huggingface_hub import login
+login(token=os.environ.get("HF_TOKEN", ""))
 
 csv.field_size_limit(sys.maxsize)
 
