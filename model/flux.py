@@ -652,7 +652,7 @@ class Flux(BaseModel):
 
     def load_pretrained_model(self, pretrained_model):
         if next(self.parameters()).device.type == 'meta':
-            map_location = we.device_id
+            map_location = torch.device(we.device_id)
         else:
             map_location = "cpu"
         if self.lora_model is not None:
