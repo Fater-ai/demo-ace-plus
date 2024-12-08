@@ -18,9 +18,6 @@ subprocess.run("rm -rf /data-nvme/zerogpu-offload/*", env={}, shell=True)
 #               env=os.environ | {'FLASH_ATTENTION_SKIP_CUDA_BUILD': "TRUE"})
 subprocess.run(shlex.split('pip install scepter'))
 
-import time 
-time.sleep(60)
-
 import cv2
 import gradio as gr
 import numpy as np
