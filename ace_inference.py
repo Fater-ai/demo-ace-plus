@@ -154,6 +154,7 @@ class ACEInference(DiffusionInference):
                 self.diffusion_model['model'] = BACKBONES.build(self.diffusion_model['cfg'], logger=self.logger).eval()
                 # self.dynamic_load(self.diffusion_model, 'diffusion_model')
                 self.diffusion_model['model'].load_pretrained_model(pretrained_model)
+                self.diffusion_model['model'] = self.diffusion_model['model'].to(torch.bfloat16)
                 self.diffusion_model['device'] = we.device_id
 
     def upscale_resize(self, image, interpolation=T.InterpolationMode.BILINEAR):
@@ -326,8 +327,8 @@ class ACEInference(DiffusionInference):
         self.dynamic_load(self.diffusion_model, 'diffusion_model')
         function_name, dtype = self.get_function_info(self.diffusion_model)
         with torch.autocast('cuda',
-                            enabled=dtype in ('float16', 'bfloat16'),
-                            dtype=getattr(torch, dtype)):
+                            enabled=True,
+                            dtype=torch.bfloat16):
             latent = self.diffusion.sample(
                 noise=noise,
                 sampler=sampler,
