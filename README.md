@@ -1,5 +1,5 @@
 ---
-title: ACE-Refiner-Chat
+title: ACE-FLUX.1-dev-preview
 emoji: 🪄
 colorFrom: yellow
 colorTo: purple
@@ -10,7 +10,7 @@ pinned: false
 license: apache-2.0
 short_description: "(Tongyi Lab) ACE: All-round Creator and Editor"
 models:
-- scepter-studio/ACE-0.6B-1024px
+- scepter-studio/ACE-FLUX.1-dev
 ---
 
 An example chatbot using [Gradio](https://gradio.app), [`huggingface_hub`](https://huggingface.co/docs/huggingface_hub/v0.22.2/en/index), and the [Hugging Face Inference API](https://huggingface.co/docs/api-inference/index).
