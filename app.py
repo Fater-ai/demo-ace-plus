@@ -86,14 +86,15 @@ class ChatBotUI(object):
             self.model_choices[model_name] = model_cfg
         print('Models: ', self.model_choices.keys())
         local_folder = FS.get_dir_to_local_dir("hf://black-forest-labs/FLUX.1-dev")
-        print(local_folder)
-        os.system(f'ls {local_folder}')
+        subprocess.run(shlex.split(f'rm -rf {local_folder}/transformer'))
+        subprocess.run(shlex.split(f'rm -rf {local_folder}/vae'))
         
         assert len(self.model_choices) > 0
         if self.default_model_name == "": self.default_model_name = list(self.model_choices.keys())[0]
         self.model_name = self.default_model_name
         self.pipe = ACEInference()
         self.pipe.init_from_cfg(self.model_choices[self.default_model_name])
+        subprocess.run(shlex.split(f'rm -rf {local_folder}'))
         self.max_msgs = 20
         self.enable_i2v = cfg.get('ENABLE_I2V', False)
         self.gradio_version = version('gradio')
