@@ -83,7 +83,7 @@ MODEL:
   DIFFUSION_MODEL:
     # NAME DESCRIPTION:  TYPE:  default: 'Flux'
     NAME: FluxEdit
-    PRETRAINED_MODEL: hf://black-forest-labs/FLUX.1-dev@flux1-dev.safetensors
+    PRETRAINED_MODEL: hf://scepter-studio/ACE-FLUX.1-dev@ace_flux.1_dev_preview.pth
     DIFFUSERS_LORA_MODEL:
     PRETRAIN_ADAPTER:
     # IN_CHANNELS DESCRIPTION: model's input channels. TYPE: int default: 64
