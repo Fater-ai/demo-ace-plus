@@ -14,8 +14,8 @@ import threading
 import spaces
 
 subprocess.run("rm -rf /data-nvme/zerogpu-offload/*", env={}, shell=True)
-subprocess.run(shlex.split('pip install flash-attn --no-build-isolation'),
-               env=os.environ | {'FLASH_ATTENTION_SKIP_CUDA_BUILD': "TRUE"})
+#subprocess.run(shlex.split('pip install flash-attn --no-build-isolation'),
+#               env=os.environ | {'FLASH_ATTENTION_SKIP_CUDA_BUILD': "TRUE"})
 subprocess.run(shlex.split('pip install scepter'))
 
 import cv2
