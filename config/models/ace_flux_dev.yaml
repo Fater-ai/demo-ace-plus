@@ -71,8 +71,8 @@ MODEL:
   DIFFUSION_MODEL:
     # NAME DESCRIPTION:  TYPE:  default: 'Flux'
     NAME: ACEFlux
-    PRETRAINED_MODEL: ms://AI-ModelScope/FLUX.1-dev@flux1-dev.safetensors
-    SWIFT_LORA_MODEL: ["ms://iic/ACE-FLUX.1-dev@ace_flux.1_dev_lora.bin"]
+    PRETRAINED_MODEL: hf://black-forest-labs/FLUX.1-dev@flux1-dev.safetensors
+    SWIFT_LORA_MODEL: ["hf://scepter-studio/ACE-FLUX.1-dev@ace_flux.1_dev_lora.bin"]
     # IN_CHANNELS DESCRIPTION: model's input channels. TYPE: int default: 64
     IN_CHANNELS: 64
     # HIDDEN_SIZE DESCRIPTION: model's hidden size. TYPE: int default: 1024
@@ -103,7 +103,7 @@ MODEL:
   FIRST_STAGE_MODEL:
     NAME: AutoencoderKLFlux
     EMBED_DIM: 16
-    PRETRAINED_MODEL: ms://AI-ModelScope/FLUX.1-dev@ae.safetensors
+    PRETRAINED_MODEL: hf://black-forest-labs/FLUX.1-dev@ae.safetensors
     IGNORE_KEYS: [ ]
     BATCH_SIZE: 8
     USE_CONV: False
@@ -149,11 +149,11 @@ MODEL:
       # HF_MODEL_CLS DESCRIPTION: huggingface cls in transfomer TYPE: NoneType default: None
       HF_MODEL_CLS: T5EncoderModel
       # MODEL_PATH DESCRIPTION: model folder path TYPE: NoneType default: None
-      MODEL_PATH: ms://AI-ModelScope/FLUX.1-dev@text_encoder_2/
+      MODEL_PATH: hf://black-forest-labs/FLUX.1-dev@text_encoder_2/
       # HF_TOKENIZER_CLS DESCRIPTION: huggingface cls in transfomer TYPE: NoneType default: None
       HF_TOKENIZER_CLS: T5Tokenizer
       # TOKENIZER_PATH DESCRIPTION: tokenizer folder path TYPE: NoneType default: None
-      TOKENIZER_PATH: ms://AI-ModelScope/FLUX.1-dev@tokenizer_2/
+      TOKENIZER_PATH: hf://black-forest-labs/FLUX.1-dev@tokenizer_2/
       ADDED_IDENTIFIER: [ '<img>','{image}', '{caption}', '{mask}', '{ref_image}', '{image1}', '{image2}', '{image3}', '{image4}', '{image5}', '{image6}', '{image7}', '{image8}', '{image9}' ]
       # MAX_LENGTH DESCRIPTION: max length of input TYPE: int default: 77
       MAX_LENGTH: 512
@@ -171,11 +171,11 @@ MODEL:
       # HF_MODEL_CLS DESCRIPTION: huggingface cls in transfomer TYPE: NoneType default: None
       HF_MODEL_CLS: CLIPTextModel
       # MODEL_PATH DESCRIPTION: model folder path TYPE: NoneType default: None
-      MODEL_PATH: ms://AI-ModelScope/FLUX.1-dev@text_encoder/
+      MODEL_PATH: hf://black-forest-labs/FLUX.1-dev@text_encoder/
       # HF_TOKENIZER_CLS DESCRIPTION: huggingface cls in transfomer TYPE: NoneType default: None
       HF_TOKENIZER_CLS: CLIPTokenizer
       # TOKENIZER_PATH DESCRIPTION: tokenizer folder path TYPE: NoneType default: None
-      TOKENIZER_PATH: ms://AI-ModelScope/FLUX.1-dev@tokenizer/
+      TOKENIZER_PATH: hf://black-forest-labs/FLUX.1-dev@tokenizer/
       # MAX_LENGTH DESCRIPTION: max length of input TYPE: int default: 77
       MAX_LENGTH: 77
       # OUTPUT_KEY DESCRIPTION: output key TYPE: str default: 'last_hidden_state'
