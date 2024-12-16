@@ -860,7 +860,7 @@ class ChatBotUI(object):
             )
 
             img = imgs[0]
-            img.save(save_path, format='PNG')
+            img.save(save_path, format='JPEG')
 
             if history_io:
                 history_io_new = copy.deepcopy(history_io)
