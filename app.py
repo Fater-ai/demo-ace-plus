@@ -25,8 +25,7 @@ import torch
 import transformers
 from PIL import Image
 from transformers import AutoModel, AutoTokenizer
-import model
-from ace_inference import ACEInference
+from ace_flux_inference import FluxACEInference
 from scepter.modules.utils.config import Config
 from scepter.modules.utils.directory import get_md5
 from scepter.modules.utils.file_system import FS
@@ -49,6 +48,9 @@ chat_sty = '\U0001F4AC'  # 💬
 video_sty = '\U0001f3a5'  # 🎥
 
 lock = threading.Lock()
+inference_dict = {
+    "ACE_FLUX": FluxACEInference,
+}
 
 
 class ChatBotUI(object):
@@ -94,9 +96,10 @@ class ChatBotUI(object):
         assert len(self.model_choices) > 0
         if self.default_model_name == "": self.default_model_name = list(self.model_choices.keys())[0]
         self.model_name = self.default_model_name
-        self.pipe = ACEInference()
-        self.pipe.init_from_cfg(self.model_choices[self.default_model_name])
-        subprocess.run(shlex.split(f'rm -rf {local_folder}'))
+        pipe_cfg = self.model_choices[self.default_model_name]
+        infer_name = pipe_cfg.get("INFERENCE_TYPE", "ACE")
+        self.pipe = inference_dict[infer_name]()
+        self.pipe.init_from_cfg(pipe_cfg)
         self.max_msgs = 20
         self.enable_i2v = cfg.get('ENABLE_I2V', False)
         self.gradio_version = version('gradio')
@@ -540,8 +543,11 @@ class ChatBotUI(object):
                 lock.acquire()
                 del self.pipe
                 torch.cuda.empty_cache()
-                self.pipe = ACEInference()
-                self.pipe.init_from_cfg(self.model_choices[model_name])
+                torch.cuda.ipc_collect()
+                pipe_cfg = self.model_choices[model_name]
+                infer_name = pipe_cfg.get("INFERENCE_TYPE", "ACE")
+                self.pipe = inference_dict[infer_name]()
+                self.pipe.init_from_cfg(pipe_cfg)
                 self.model_name = model_name
                 lock.release()
 
@@ -829,7 +835,8 @@ class ChatBotUI(object):
                 edit_image = None
                 edit_image_mask = None
                 edit_task = ''
-
+            if new_message == "":
+                new_message = "a beautiful girl wear a skirt."
             print(new_message)
             imgs = self.pipe(
                 image=edit_image,
@@ -896,9 +903,9 @@ class ChatBotUI(object):
             }
 
             buffered = io.BytesIO()
-            img.convert('RGB').save(buffered, format='PNG')
+            img.convert('RGB').save(buffered, format='JPEG')
             img_b64 = base64.b64encode(buffered.getvalue()).decode('utf-8')
-            img_str = f'<img src="data:image/png;base64,{img_b64}" style="pointer-events: none;">'
+            img_str = f'<img src="data:image/jpg;base64,{img_b64}" style="pointer-events: none;">'
 
             history.append(
                 (message,
@@ -1048,17 +1055,17 @@ class ChatBotUI(object):
 
             img = imgs[0]
             buffered = io.BytesIO()
-            img.convert('RGB').save(buffered, format='PNG')
+            img.convert('RGB').save(buffered, format='JPEG')
             img_b64 = base64.b64encode(buffered.getvalue()).decode('utf-8')
             img_str = f'<img src="data:image/png;base64,{img_b64}" style="pointer-events: none;">'
             history = [(prompt,
                         f'{pre_info} The generated image is:\n {img_str}')]
 
             img_id = get_md5(img_b64)[:12]
-            save_path = os.path.join(self.cache_dir, f'{img_id}.png')
+            save_path = os.path.join(self.cache_dir, f'{img_id}.jpg')
             img.convert('RGB').save(save_path)
 
-            return self.get_history(history), gr.update(value=''), gr.update(
+            return self.get_history(history), gr.update(value=prompt), gr.update(
                 visible=False), gr.update(value=save_path), gr.update(value=-1)
 
         with self.eg:
