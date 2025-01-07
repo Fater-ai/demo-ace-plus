@@ -4,6 +4,7 @@ import threading
 import time
 import gradio as gr
 import numpy as np
+import spaces
 import torch
 from PIL import Image
 import glob
@@ -20,7 +21,7 @@ from scepter.modules.utils.file_system import FS
 from inference.ace_plus_diffusers import ACEPlusDiffuserInference
 from inference.utils import edit_preprocess
 from examples.examples import all_examples
-import spaces
+
 
 inference_dict = {
     "ACE_DIFFUSER_PLUS": ACEPlusDiffuserInference
