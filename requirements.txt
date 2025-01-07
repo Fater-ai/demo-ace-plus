@@ -1,7 +1,5 @@
 huggingface_hub
 diffusers
-transformers
-gradio_imageslider
 torch==2.4.0
 torchvision
 gradio==4.44.1
