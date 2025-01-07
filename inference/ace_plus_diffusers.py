@@ -32,7 +32,7 @@ class ACEPlusDiffuserInference():
 
         local_folder = FS.get_dir_to_local_dir(cfg.MODEL.PRETRAINED_MODEL)
 
-        self.pipe = FluxFillPipeline.from_pretrained(local_folder, torch_dtype=torch.bfloat16).to("cuda")
+        self.pipe = FluxFillPipeline.from_pretrained(local_folder, torch_dtype=torch.bfloat16).to(we.device_id)
 
         tokenizer_2 = T5TokenizerFast.from_pretrained(os.path.join(local_folder, "tokenizer_2"),
                                                       additional_special_tokens=["{image}"])
