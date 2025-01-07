@@ -454,7 +454,7 @@ class DemoUI(object):
 
             edit_image = self.construct_edit_image(edit_image, edit_mask)
 
-            pre_edit_image, pre_edit_mask, pre_ref_image = preprocess_input(ref_image, edit_image)
+            pre_edit_image, pre_edit_mask, pre_ref_image, is_suc, err_msg = preprocess_input(ref_image, edit_image)
             pre_edit_image = edit_preprocess(edit_info, we.device_id, pre_edit_image, pre_edit_mask)
             edit_info = edit_info or {}
             repainting_scale = edit_info.get("REPAINTING_SCALE", 1.0)
