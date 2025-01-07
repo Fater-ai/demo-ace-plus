@@ -20,6 +20,7 @@ from scepter.modules.utils.file_system import FS
 from inference.ace_plus_diffusers import ACEPlusDiffuserInference
 from inference.utils import edit_preprocess
 from examples.examples import all_examples
+import spaces
 
 inference_dict = {
     "ACE_DIFFUSER_PLUS": ACEPlusDiffuserInference
@@ -162,6 +163,7 @@ class DemoUI(object):
                                 In the Edit Image section, the uploaded image will maintain its structural and content information, and you must draw a mask area to specify the region to be regenerated.
                                3. When the task type is local editing, there are various editing types to choose from. Users can select different information preserving dimensions, such as edge information, 
                                 color information, and more. The pre-processing information can be viewed in the 'related input image' tab.
+                               4. More details can be found in [page](https://ali-vilab.github.io/ACE_plus_page).
                             """
                     self.instruction = gr.Markdown(value=instruction)
         with gr.Row():
