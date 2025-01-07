@@ -58,6 +58,7 @@ video_sty = '\U0001f3a5'  # 🎥
 
 lock = threading.Lock()
 class DemoUI(object):
+    @spaces.GPU(duration=60)
     def __init__(self,
                  infer_dir = "./config",
                  model_list='./models/model_zoo.yaml'
@@ -78,8 +79,7 @@ class DemoUI(object):
         pipe_cfg = self.model_choices[self.default_model_name]
         infer_name = pipe_cfg.get("INFERENCE_TYPE", "ACE")
         self.pipe = inference_dict[infer_name]()
-        with spaces.GPU(duration=60):
-            self.pipe.init_from_cfg(pipe_cfg)
+        self.pipe.init_from_cfg(pipe_cfg)
 
         # choose different model
         self.task_model_cfg = Config(load=True, cfg_file=model_list)
