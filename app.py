@@ -477,7 +477,7 @@ class DemoUI(object):
             et = time.time()
             msg = f"prompt: {prompt}; seed: {seed}; cost time: {et - st}s; repaiting scale: {repainting_scale}"
             if pre_edit_image is not None:
-                ret_image = Image.composite(pre_edit_image, Image.new("RGB", pre_edit_image.size, (0, 0, 0)), pre_edit_mask)
+                ret_image = Image.composite(Image.new("RGB", pre_edit_image.size, (0, 0, 0)), pre_edit_image, pre_edit_mask)
             else:
                 ret_image = None
             return (gr.Image(value=image), gr.Column(visible=True),
