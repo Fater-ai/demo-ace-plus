@@ -58,7 +58,7 @@ video_sty = '\U0001f3a5'  # 🎥
 
 lock = threading.Lock()
 class DemoUI(object):
-    @spaces.GPU(duration=60)
+    #@spaces.GPU(duration=60)
     def __init__(self,
                  infer_dir = "./config",
                  model_list='./models/model_zoo.yaml'
