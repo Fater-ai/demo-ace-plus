@@ -445,7 +445,7 @@ class DemoUI(object):
 
         @spaces.GPU(duration=60)
         def run_example(task_type, edit_type, prompt, ref_image, edit_image, edit_mask,
-                        output_h, output_w, seed):
+                        output_h, output_w, seed, progress=gr.Progress(track_tqdm=True)):
             model_path = self.task_model[task_type]["MODEL_PATH"]
 
             step = self.pipe.input.get("sample_steps", 20)
