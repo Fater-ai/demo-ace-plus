@@ -373,6 +373,7 @@ class DemoUI(object):
                      repainting_scale,
                      progress=gr.Progress(track_tqdm=True)
         ):
+            print(prompt)
             model_path = self.task_model[task_type]["MODEL_PATH"]
             edit_info = self.edit_type_dict[edit_type]
 
