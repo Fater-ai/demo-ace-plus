@@ -358,7 +358,7 @@ class DemoUI(object):
                 err_msg = "Please provide the reference image or edited image."
                 return None, None, None, False, err_msg
             return edit_image, edit_mask, ref_image, is_suc, err_msg
-        @spaces.GPU(duration=60)
+        @spaces.GPU(duration=80)
         def run_chat(
                      prompt,
                      ref_image,
@@ -444,7 +444,7 @@ class DemoUI(object):
                          outputs=chat_outputs,
                          queue=True)
 
-        @spaces.GPU(duration=60)
+        @spaces.GPU(duration=80)
         def run_example(task_type, edit_type, prompt, ref_image, edit_image, edit_mask,
                         output_h, output_w, seed, progress=gr.Progress(track_tqdm=True)):
             model_path = self.task_model[task_type]["MODEL_PATH"]
