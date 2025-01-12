@@ -2,9 +2,9 @@ all_examples = [
             {
                 "input_image": None,
                 "input_mask": None,
-                "input_reference_image": "assets/samples/portrait/human_1.jpg",
+                "input_reference_image": "assets/samples/portrait/8f13fc996c99688f3af8e2300848a001.jpg",
                 "save_path": "examples/outputs/portrait_human_1.jpg",
-                "instruction": "Maintain the facial features, A girl is wearing a neat police uniform and sporting a badge. She is smiling with a friendly and confident demeanor. The background is blurred, featuring a cartoon logo.",
+                "instruction": "Dress the character in the image with elf ears and a wizard's robe, transforming them into a mage character from a fantasy world.",
                 "output_h": 1024,
                 "output_w": 1024,
                 "seed": 4194866942,
