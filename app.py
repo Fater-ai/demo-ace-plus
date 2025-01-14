@@ -508,6 +508,7 @@ class DemoUI(object):
                          self.edit_preprocess_mask_preview, self.generation_info_preview, self.edit_image],
                 examples_per_page=6,
                 cache_examples=False,
+                queue=True,
                 run_on_click=True)
 
 
