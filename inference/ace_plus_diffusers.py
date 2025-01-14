@@ -108,6 +108,8 @@ class ACEPlusDiffuserInference():
             max_sequence_length=512,
             generator=generator
         ).images[0]
+        if lora_path is not None:
+            self.pipe.unload_lora_weights()
         return self.image_processor.postprocess(image, slice_w, out_w, out_h), seed
 
 
