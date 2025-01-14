@@ -507,8 +507,7 @@ class DemoUI(object):
                 outputs=[self.gallery_image, self.edit_preprocess_panel, self.edit_preprocess_preview,
                          self.edit_preprocess_mask_preview, self.generation_info_preview, self.edit_image],
                 examples_per_page=6,
-                cache_examples=False,
-                queue=True,
+                cache_examples=True,
                 run_on_click=True)
 
 
