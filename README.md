@@ -8,7 +8,7 @@ sdk_version: 4.44.1
 app_file: app.py
 pinned: false
 license: apache-2.0
-short_description: "(Tongyi Lab) ACE++"
+short_description: "Consistency generation of portrait and subject"
 models:
 - ali-vilab/ACE_Plus
 ---
