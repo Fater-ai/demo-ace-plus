@@ -2,7 +2,7 @@ NAME: ACEInference
 DTYPE: bfloat16
 VERSION: fft
 IS_DEFAULT: True
-MAX_SEQ_LEN: 4096
+MAX_SEQ_LEN: 3072
 MODEL:
   NAME: LatentDiffusionACEPlus
   PARAMETERIZATION: rf
