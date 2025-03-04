@@ -15,6 +15,8 @@ import importlib
 subprocess.run("rm -rf /data-nvme/zerogpu-offload/*", env={}, shell=True)
 subprocess.run(shlex.split('pip install scepter --no-deps'))
 subprocess.run(shlex.split('pip install numpy==1.26'))
+subprocess.run(shlex.split('pip install flash-attn --no-build-isolation'),
+               env=os.environ | {'FLASH_ATTENTION_SKIP_CUDA_BUILD': "TRUE"})
 from scepter.modules.transform.io import pillow_convert
 from scepter.modules.utils.config import Config
 from scepter.modules.utils.distribute import we
