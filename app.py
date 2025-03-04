@@ -18,6 +18,13 @@ from scepter.modules.transform.io import pillow_convert
 from scepter.modules.utils.config import Config
 from scepter.modules.utils.distribute import we
 from scepter.modules.utils.file_system import FS
+if os.path.exists('__init__.py'):
+    package_name = 'scepter_ext'
+    spec = importlib.util.spec_from_file_location(package_name, '__init__.py')
+    package = importlib.util.module_from_spec(spec)
+    sys.modules[package_name] = package
+    spec.loader.exec_module(package)
+
 from examples.examples import fft_examples
 from inference.registry import INFERENCES
 from inference.utils import edit_preprocess
