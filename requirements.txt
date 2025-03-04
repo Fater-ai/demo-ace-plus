@@ -1,6 +1,6 @@
 huggingface_hub
 diffusers
-transformers
+transformers==4.46
 gradio_imageslider
 torch==2.4.0
 xformers==0.0.27.post2
