@@ -12,7 +12,6 @@ from scepter.modules.utils.logger import get_logger
 from transformers import T5TokenizerFast
 from .utils import ACEPlusImageProcessor
 
-
 class ACEPlusDiffuserInference():
     def __init__(self, logger=None):
         if logger is None:
@@ -38,7 +37,6 @@ class ACEPlusDiffuserInference():
                                                       additional_special_tokens=["{image}"])
         self.pipe.tokenizer_2 = tokenizer_2
         self.load_default(cfg.DEFAULT_PARAS)
-
 
     def prepare_input(self,
                       image,
@@ -88,7 +86,11 @@ class ACEPlusDiffuserInference():
         if isinstance(prompt, str):
             prompt = [prompt]
         seed = seed if seed >= 0 else random.randint(0, 2 ** 32 - 1)
-        image, mask, out_h, out_w, slice_w = self.image_processor.preprocess(reference_image, edit_image, edit_mask, repainting_scale = repainting_scale)
+        # edit_image, edit_mask, change_image, content_image, out_h, out_w, slice_w
+        image, mask, _, _, out_h, out_w, slice_w = self.image_processor.preprocess(reference_image, edit_image, edit_mask,
+                                                                             width = output_width,
+                                                                             height = output_height,
+                                                                             repainting_scale = repainting_scale)
         h, w = image.shape[1:]
         generator = torch.Generator("cpu").manual_seed(seed)
         masked_image_latents = self.prepare_input(image, mask,
@@ -97,6 +99,8 @@ class ACEPlusDiffuserInference():
         if lora_path is not None:
             with FS.get_from(lora_path) as local_path:
                 self.pipe.load_lora_weights(local_path)
+
+
 
         image = self.pipe(
             prompt=prompt,
