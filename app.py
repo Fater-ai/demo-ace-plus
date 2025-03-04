@@ -40,6 +40,10 @@ fs_list = [
 
 for one_fs in fs_list:
     FS.init_fs_client(one_fs)
+
+os.environ["FLUX_FILL_PATH"]="hf://black-forest-labs/FLUX.1-Fill-dev"
+os.environ["ACE_PLUS_FFT_MODEL"]="hf://ali-vilab/ACE_Plus@ace_plus_fft.safetensors"
+
 os.environ["FLUX_FILL_PATH"]=FS.get_dir_to_local_dir(os.environ["FLUX_FILL_PATH"])
 os.environ["ACE_PLUS_FFT_MODEL"]=FS.get_from(os.environ["ACE_PLUS_FFT_MODEL"])
 
