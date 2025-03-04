@@ -11,6 +11,7 @@ import glob
 import os, csv, sys
 import shlex
 import subprocess
+import importlib
 subprocess.run("rm -rf /data-nvme/zerogpu-offload/*", env={}, shell=True)
 subprocess.run(shlex.split('pip install scepter'))
 subprocess.run(shlex.split('pip install numpy==1.26'))
