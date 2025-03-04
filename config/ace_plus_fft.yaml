@@ -1,0 +1,192 @@
+NAME: ACEInference
+DTYPE: bfloat16
+VERSION: fft
+IS_DEFAULT: True
+MAX_SEQ_LEN: 4096
+MODEL:
+  NAME: LatentDiffusionACEPlus
+  PARAMETERIZATION: rf
+  TIMESTEPS: 1000
+  GUIDE_SCALE: 1.0
+  PRETRAINED_MODEL:
+  IGNORE_KEYS: [ ]
+  USE_EMA: False
+  EVAL_EMA: False
+  SIZE_FACTOR: 8
+  DIFFUSION:
+    NAME: DiffusionFluxRF
+    PREDICTION_TYPE: raw
+    NOISE_NORM: True
+    # NOISE_SCHEDULER DESCRIPTION:  TYPE:  default: ''
+    NOISE_SCHEDULER:
+      NAME: FlowMatchFluxShiftScheduler
+      SHIFT: False
+      PRE_T_SAMPLE: True
+      PRE_T_SAMPLE_FOLD: 1
+      SIGMOID_SCALE: 1
+      BASE_SHIFT: 0.5
+      MAX_SHIFT: 1.15
+    SAMPLER_SCHEDULER:
+      NAME: FlowMatchFluxShiftScheduler
+      SHIFT: True
+      PRE_T_SAMPLE: False
+      SIGMOID_SCALE: 1
+      BASE_SHIFT: 0.5
+      MAX_SHIFT: 1.15
+
+  #
+  DIFFUSION_MODEL:
+    # NAME DESCRIPTION:  TYPE:  default: 'Flux'
+    NAME: FluxMRModiACEPlus
+    PRETRAINED_MODEL: ${ACE_PLUS_FFT_MODEL}
+    # IN_CHANNELS DESCRIPTION: model's input channels. TYPE: int default: 64
+    IN_CHANNELS: 448
+    # OUT_CHANNELS DESCRIPTION: model's input channels. TYPE: int default: 64
+    OUT_CHANNELS: 64
+    # HIDDEN_SIZE DESCRIPTION: model's hidden size. TYPE: int default: 1024
+    HIDDEN_SIZE: 3072
+    REDUX_DIM: 1152
+    # NUM_HEADS DESCRIPTION: number of heads in the transformer. TYPE: int default: 16
+    NUM_HEADS: 24
+    # AXES_DIM DESCRIPTION: dimensions of the axes of the positional encoding. TYPE: list default: [16, 56, 56]
+    AXES_DIM: [ 16, 56, 56 ]
+    # THETA DESCRIPTION: theta for positional encoding. TYPE: int default: 10000
+    THETA: 10000
+    # VEC_IN_DIM DESCRIPTION: dimension of the vector input. TYPE: int default: 768
+    VEC_IN_DIM: 768
+    # GUIDANCE_EMBED DESCRIPTION: whether to use guidance embedding. TYPE: bool default: False
+    GUIDANCE_EMBED: True
+    # CONTEXT_IN_DIM DESCRIPTION: dimension of the context input. TYPE: int default: 4096
+    CONTEXT_IN_DIM: 4096
+    # MLP_RATIO DESCRIPTION: ratio of mlp hidden size to hidden size. TYPE: float default: 4.0
+    MLP_RATIO: 4.0
+    # QKV_BIAS DESCRIPTION: whether to use bias in qkv projection. TYPE: bool default: True
+    QKV_BIAS: True
+    # DEPTH DESCRIPTION: number of transformer blocks. TYPE: int default: 19
+    DEPTH: 19
+    # DEPTH_SINGLE_BLOCKS DESCRIPTION: number of transformer blocks in the single stream block. TYPE: int default: 38
+    DEPTH_SINGLE_BLOCKS: 38
+    ATTN_BACKEND: flash_attn
+
+  #
+  FIRST_STAGE_MODEL:
+    NAME: AutoencoderKLFlux
+    EMBED_DIM: 16
+    PRETRAINED_MODEL: ${FLUX_FILL_PATH}/ae.safetensors
+    IGNORE_KEYS: [ ]
+    BATCH_SIZE: 8
+    USE_CONV: False
+    SCALE_FACTOR: 0.3611
+    SHIFT_FACTOR: 0.1159
+    #
+    ENCODER:
+      NAME: Encoder
+      CH: 128
+      OUT_CH: 3
+      NUM_RES_BLOCKS: 2
+      IN_CHANNELS: 3
+      ATTN_RESOLUTIONS: [ ]
+      CH_MULT: [ 1, 2, 4, 4 ]
+      Z_CHANNELS: 16
+      DOUBLE_Z: True
+      DROPOUT: 0.0
+      RESAMP_WITH_CONV: True
+    #
+    DECODER:
+      NAME: Decoder
+      CH: 128
+      OUT_CH: 3
+      NUM_RES_BLOCKS: 2
+      IN_CHANNELS: 3
+      ATTN_RESOLUTIONS: [ ]
+      CH_MULT: [ 1, 2, 4, 4 ]
+      Z_CHANNELS: 16
+      DROPOUT: 0.0
+      RESAMP_WITH_CONV: True
+      GIVE_PRE_END: False
+      TANH_OUT: False
+  #
+  COND_STAGE_MODEL:
+    # NAME DESCRIPTION:  TYPE:  default: 'T5PlusClipFluxEmbedder'
+    NAME: T5PlusClipFluxEmbedder
+    # T5_MODEL DESCRIPTION:  TYPE:  default: ''
+    T5_MODEL:
+      # NAME DESCRIPTION:  TYPE:  default: 'HFEmbedder'
+      NAME: HFEmbedder
+      # HF_MODEL_CLS DESCRIPTION: huggingface cls in transfomer TYPE: NoneType default: None
+      HF_MODEL_CLS: T5EncoderModel
+      # MODEL_PATH DESCRIPTION: model folder path TYPE: NoneType default: None
+      MODEL_PATH: ${FLUX_FILL_PATH}/text_encoder_2/
+      # HF_TOKENIZER_CLS DESCRIPTION: huggingface cls in transfomer TYPE: NoneType default: None
+      HF_TOKENIZER_CLS: T5Tokenizer
+      # TOKENIZER_PATH DESCRIPTION: tokenizer folder path TYPE: NoneType default: None
+      TOKENIZER_PATH: ${FLUX_FILL_PATH}/tokenizer_2/
+      ADDED_IDENTIFIER: [ '<img>','{image}', '{caption}', '{mask}', '{ref_image}', '{image1}', '{image2}', '{image3}', '{image4}', '{image5}', '{image6}', '{image7}', '{image8}', '{image9}' ]
+      # MAX_LENGTH DESCRIPTION: max length of input TYPE: int default: 77
+      MAX_LENGTH: 512
+      # OUTPUT_KEY DESCRIPTION: output key TYPE: str default: 'last_hidden_state'
+      OUTPUT_KEY: last_hidden_state
+      # D_TYPE DESCRIPTION: dtype TYPE: str default: 'bfloat16'
+      D_TYPE: bfloat16
+      # BATCH_INFER DESCRIPTION: batch infer TYPE: bool default: False
+      BATCH_INFER: False
+      CLEAN: whitespace
+    # CLIP_MODEL DESCRIPTION:  TYPE:  default: ''
+    CLIP_MODEL:
+      # NAME DESCRIPTION:  TYPE:  default: 'HFEmbedder'
+      NAME: HFEmbedder
+      # HF_MODEL_CLS DESCRIPTION: huggingface cls in transfomer TYPE: NoneType default: None
+      HF_MODEL_CLS: CLIPTextModel
+      # MODEL_PATH DESCRIPTION: model folder path TYPE: NoneType default: None
+      MODEL_PATH: ${FLUX_FILL_PATH}/text_encoder/
+      # HF_TOKENIZER_CLS DESCRIPTION: huggingface cls in transfomer TYPE: NoneType default: None
+      HF_TOKENIZER_CLS: CLIPTokenizer
+      # TOKENIZER_PATH DESCRIPTION: tokenizer folder path TYPE: NoneType default: None
+      TOKENIZER_PATH: ${FLUX_FILL_PATH}/tokenizer/
+      # MAX_LENGTH DESCRIPTION: max length of input TYPE: int default: 77
+      MAX_LENGTH: 77
+      # OUTPUT_KEY DESCRIPTION: output key TYPE: str default: 'last_hidden_state'
+      OUTPUT_KEY: pooler_output
+      # D_TYPE DESCRIPTION: dtype TYPE: str default: 'bfloat16'
+      D_TYPE: bfloat16
+      # BATCH_INFER DESCRIPTION: batch infer TYPE: bool default: False
+      BATCH_INFER: True
+      CLEAN: whitespace
+
+PREPROCESSOR:
+  - TYPE: repainting
+    REPAINTING_SCALE: 1.0
+    ANNOTATOR:
+  - TYPE: no_preprocess
+    REPAINTING_SCALE: 0.0
+    ANNOTATOR:
+  - TYPE: mosaic_repainting
+    REPAINTING_SCALE: 0.0
+    ANNOTATOR:
+      NAME: ColorAnnotator
+      RATIO: 64
+  - TYPE: contour_repainting
+    REPAINTING_SCALE: 0.0
+    ANNOTATOR:
+      NAME: InfoDrawContourAnnotator
+      INPUT_NC: 3
+      OUTPUT_NC: 1
+      N_RESIDUAL_BLOCKS: 3
+      SIGMOID: True
+      PRETRAINED_MODEL: "ms://iic/scepter_annotator@annotator/ckpts/informative_drawing_contour_style.pth"
+  - TYPE: depth_repainting
+    REPAINTING_SCALE: 0.0
+    ANNOTATOR:
+      NAME: MidasDetector
+      PRETRAINED_MODEL: "ms://iic/scepter_annotator@annotator/ckpts/dpt_hybrid-midas-501f0c75.pt"
+  - TYPE: recolorizing
+    REPAINTING_SCALE: 0.0
+    ANNOTATOR:
+      NAME: GrayAnnotator
+
+SAMPLE_ARGS:
+  SAMPLE_STEPS: 28
+  SAMPLER: flow_euler
+  SEED: 42
+  IMAGE_SIZE: [ 1024, 1024 ]
+  GUIDE_SCALE: 50
